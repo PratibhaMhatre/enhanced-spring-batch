@@ -1,3 +1,7 @@
+/*
+ * Created for Innovation.
+ * 
+ */
 package com.accenture.spring.batch.annotation;
 
 import java.lang.annotation.Documented;
@@ -6,7 +10,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target({ElementType.FIELD})
+/**
+ * Trims all the Spaces
+ * 
+ * @author aparna.satpathy,shruti.mukesh.sethia
+ * 
+ */
+@Target({ ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface Trim {

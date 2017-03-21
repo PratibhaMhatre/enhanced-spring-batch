@@ -1,9 +1,17 @@
+/*
+ * Created for Innovation.
+ * 
+ */
 package com.accenture.spring.batch.transform;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,9 +21,17 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
 import com.accenture.spring.batch.annotation.ReplaceQuoteWithSpace;
+import com.accenture.spring.batch.annotation.StringToDate;
+import com.accenture.spring.batch.annotation.StringToTimestamp;
 import com.accenture.spring.batch.annotation.Transform;
 import com.accenture.spring.batch.annotation.Trim;
 
+/**
+ * Implementation of Annotated Fields
+ * 
+ * @author aparna.satpathy,shruti.mukesh.sethia
+ * 
+ */
 @Component
 public class Annotate {
 
@@ -65,6 +81,54 @@ public class Annotate {
 					} else if (annotation instanceof ReplaceQuoteWithSpace) {
 						String value = (String) getMethod.invoke(obj);
 						setMethod.invoke(obj, StringUtils.replace(value, "\"", " "));
+					} else if (annotation instanceof StringToDate) {
+						String value = (String) getMethod.invoke(obj);
+						System.out.println("value: " + value);
+						Date formattedDate = null;
+
+						SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+						if (value == null || "".equals(value)) {
+							return null;
+						}
+						try {
+
+							formattedDate = formatter.parse(value);
+							System.out.println("formattedDate: " + formattedDate);
+
+						} catch (ParseException e) {
+							System.out.println("INVALID_DATE_VALUE");
+						}
+						String dateName = ((StringToDate) annotation).value();
+						System.out.println("DateName: " + dateName);
+
+						Method setMethod1 = setterMap.get(dateName);
+						System.out.println("setMethod1: " + setMethod1);
+						setMethod1.invoke(obj, formattedDate);
+
+					} else if (annotation instanceof StringToTimestamp) {
+						String value1 = (String) getMethod.invoke(obj);
+						System.out.println("value1: " + value1);
+						SimpleDateFormat dateFormat = new SimpleDateFormat(
+								"yyyy-MM-dd HH:mm:ss.SSS");
+						Date parsedDate = null;
+						Timestamp timestamp = null;
+						if (StringUtils.isBlank(value1)) {
+							return null;
+						}
+						try {
+							parsedDate = dateFormat.parse(value1);
+							timestamp = new java.sql.Timestamp(parsedDate.getTime());
+						} catch (ParseException e) {
+							System.out.println("INVALID_DATE_VALUE");
+						}
+						String timestampName = ((StringToTimestamp) annotation).value1();
+						System.out.println("timestamp: " + timestampName);
+
+						Method setMethod1 = setterMap.get(timestampName);
+						System.out.println("setMethod1: " + setMethod1);
+						setMethod1.invoke(obj, timestamp);
+						
+
 					}
 				}
 
