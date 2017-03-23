@@ -37,6 +37,7 @@ public class AppTest {
 			System.out.println("Employee is "+employee);
 			employee =(Employee) annotate.transform(employee);
 			System.out.println("Employee is "+employee);
+			employee =(Employee) annotate.fileTransfer(employee);
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

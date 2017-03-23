@@ -9,6 +9,9 @@ import java.util.Date;
 
 import org.springframework.stereotype.Component;
 
+import com.accenture.spring.batch.annotation.CopyFile;
+import com.accenture.spring.batch.annotation.FileTransfer;
+import com.accenture.spring.batch.annotation.MoveFile;
 import com.accenture.spring.batch.annotation.ReplaceQuoteWithSpace;
 import com.accenture.spring.batch.annotation.StringToDate;
 import com.accenture.spring.batch.annotation.StringToTimestamp;
@@ -24,6 +27,7 @@ import com.accenture.spring.batch.annotation.Trim;
  */
 @Component
 @Transform
+@FileTransfer
 public class Employee {
 
 	@ReplaceQuoteWithSpace
@@ -41,6 +45,23 @@ public class Employee {
 	private String payTimestamp;
 
 	private Timestamp dteTimestamp;
+	
+	@CopyFile(source="C:\\Users\\shruti.mukesh.sethia\\FileMovementTest\\File1\\", destination="C:\\Users\\shruti.mukesh.sethia\\FileMovementTest\\File2\\" ,filename="abc" ,regexpression="*.txt")
+	private String List;
+
+	/**
+	 * @return the list
+	 */
+	public String getList() {
+		return List;
+	}
+
+	/**
+	 * @param list the list to set
+	 */
+	public void setList(String list) {
+		List = list;
+	}
 
 	public String getName() {
 		return name;

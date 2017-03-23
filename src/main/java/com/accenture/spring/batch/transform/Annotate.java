@@ -20,11 +20,15 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
+import com.accenture.spring.batch.annotation.CopyFile;
+import com.accenture.spring.batch.annotation.FileTransfer;
+import com.accenture.spring.batch.annotation.MoveFile;
 import com.accenture.spring.batch.annotation.ReplaceQuoteWithSpace;
 import com.accenture.spring.batch.annotation.StringToDate;
 import com.accenture.spring.batch.annotation.StringToTimestamp;
 import com.accenture.spring.batch.annotation.Transform;
 import com.accenture.spring.batch.annotation.Trim;
+import com.accenture.spring.batch.utils.FileUtils;
 
 /**
  * Implementation of Annotated Fields
@@ -139,5 +143,62 @@ public class Annotate {
 		return obj;
 
 	}
+	
+	public Object fileTransfer(Object obj) throws IllegalAccessException, IllegalArgumentException,
+	InvocationTargetException, NoSuchMethodException, SecurityException {
+
+context = new ClassPathXmlApplicationContext("applicationContext.xml");
+
+final Map<String, Object> annotatedClasses = context.getBeansWithAnnotation(FileTransfer.class);
+
+for (final Object annotatedClass : annotatedClasses.values()) {
+
+	
+	Field[] fields = annotatedClass.getClass().getDeclaredFields();
+
+	
+	
+
+	for (Field field : fields) {
+
+		Annotation[] annotations = field.getDeclaredAnnotations();
+
+		for (Annotation annotation : annotations) {
+			String name = field.getName();
+		System.out.println("Name: "+name );
+			if (annotation instanceof MoveFile) {
+				String sourceName = ((MoveFile) annotation).source();
+				String destinationName = ((MoveFile) annotation).destination();
+				String fileName = ((MoveFile) annotation).filename();
+				String extention = ((MoveFile) annotation).regexpression();
+				System.out.println("sourceName: "+sourceName );
+				System.out.println("destinationName: "+destinationName );
+				System.out.println("fileName: "+fileName );
+				System.out.println("extention: "+extention );
+				
+				FileUtils.moveFiles(sourceName, destinationName, extention);
+				
+			}
+			else if(annotation instanceof CopyFile){
+				String sourceName = ((CopyFile) annotation).source();
+				String destinationName = ((CopyFile) annotation).destination();
+				String fileName = ((CopyFile) annotation).filename();
+				String extention = ((CopyFile) annotation).regexpression();
+				System.out.println("sourceName: "+sourceName );
+				System.out.println("destinationName: "+destinationName );
+				System.out.println("fileName: "+fileName );
+				System.out.println("extention: "+extention );
+				
+				FileUtils.copyFiles(sourceName, destinationName, extention);
+				
+			}
+		}
+
+	}
+
+}
+return obj;
+
+}
 
 }
