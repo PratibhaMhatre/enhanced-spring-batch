@@ -37,7 +37,7 @@ public class Employee {
 
 	private Date dtePayDate;
 	
-	@StringToTimestamp(value1 = "dteTimestamp")
+	@StringToTimestamp(value = "dteTimestamp")
 	private String payTimestamp;
 
 	private Timestamp dteTimestamp;

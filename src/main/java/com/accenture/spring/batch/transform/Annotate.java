@@ -54,13 +54,14 @@ public class Annotate {
 
 			for (Method method : methods) {
 				for (Field field : fields) {
+					
+					String methodName=method.getName();
+					String fieldName=field.getName();
 
-					if (StringUtils.containsIgnoreCase(method.getName(), field.getName())
-							&& method.getName().startsWith("get")) {
+					if (methodName.equalsIgnoreCase("get"+fieldName)) {
 						getterMap.put(field.getName(), method);
 					}
-					if (StringUtils.containsIgnoreCase(method.getName(), field.getName())
-							&& method.getName().startsWith("set")) {
+					if (methodName.equalsIgnoreCase("set"+fieldName)) {
 						setterMap.put(field.getName(), method);
 					}
 				}
@@ -106,22 +107,22 @@ public class Annotate {
 						setMethod1.invoke(obj, formattedDate);
 
 					} else if (annotation instanceof StringToTimestamp) {
-						String value1 = (String) getMethod.invoke(obj);
-						System.out.println("value1: " + value1);
+						String value = (String) getMethod.invoke(obj);
+						System.out.println("value1: " + value);
 						SimpleDateFormat dateFormat = new SimpleDateFormat(
 								"yyyy-MM-dd HH:mm:ss.SSS");
 						Date parsedDate = null;
 						Timestamp timestamp = null;
-						if (StringUtils.isBlank(value1)) {
+						if (StringUtils.isBlank(value)) {
 							return null;
 						}
 						try {
-							parsedDate = dateFormat.parse(value1);
+							parsedDate = dateFormat.parse(value);
 							timestamp = new java.sql.Timestamp(parsedDate.getTime());
 						} catch (ParseException e) {
 							System.out.println("INVALID_DATE_VALUE");
 						}
-						String timestampName = ((StringToTimestamp) annotation).value1();
+						String timestampName = ((StringToTimestamp) annotation).value();
 						System.out.println("timestamp: " + timestampName);
 
 						Method setMethod1 = setterMap.get(timestampName);
