@@ -57,6 +57,35 @@ public class FileUtils {
 
 	}
 
+	public static void deleteFiles(String outputDir, String regex) {
+
+		File dir = new File(outputDir.trim());
+
+		FileFilter fileFilter = new WildcardFileFilter(regex);
+		File[] files = dir.listFiles(fileFilter);
+		for (File file : files) {
+
+			if (file.delete()) {
+				System.out.println("Deleting file : " + file);
+			}
+		}
+
+	}
+
+	public static void renameFiles(String outputDir, String name,String regex) {
+
+		File dir = new File(outputDir.trim());
+
+		FileFilter fileFilter = new WildcardFileFilter(regex);
+		File[] files = dir.listFiles(fileFilter);
+		for (File file : files) {
+			
+			System.out.println("Renaming file : " + file);
+			file.renameTo(new File(outputDir + name));
+
+		}
+
+	}
 
 
 }

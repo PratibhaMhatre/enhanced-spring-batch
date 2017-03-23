@@ -21,8 +21,10 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
 import com.accenture.spring.batch.annotation.CopyFile;
+import com.accenture.spring.batch.annotation.DeleteFile;
 import com.accenture.spring.batch.annotation.FileTransfer;
 import com.accenture.spring.batch.annotation.MoveFile;
+import com.accenture.spring.batch.annotation.RenameFile;
 import com.accenture.spring.batch.annotation.ReplaceQuoteWithSpace;
 import com.accenture.spring.batch.annotation.StringToDate;
 import com.accenture.spring.batch.annotation.StringToTimestamp;
@@ -167,29 +169,53 @@ for (final Object annotatedClass : annotatedClasses.values()) {
 			String name = field.getName();
 		System.out.println("Name: "+name );
 			if (annotation instanceof MoveFile) {
-				String sourceName = ((MoveFile) annotation).source();
-				String destinationName = ((MoveFile) annotation).destination();
+				String sourcePath = ((MoveFile) annotation).source();
+				String destinationPath = ((MoveFile) annotation).destination();
 				String fileName = ((MoveFile) annotation).filename();
 				String extention = ((MoveFile) annotation).regexpression();
-				System.out.println("sourceName: "+sourceName );
-				System.out.println("destinationName: "+destinationName );
+				System.out.println("sourcePath: "+sourcePath );
+				System.out.println("destinationPath: "+destinationPath );
 				System.out.println("fileName: "+fileName );
 				System.out.println("extention: "+extention );
 				
-				FileUtils.moveFiles(sourceName, destinationName, extention);
+				FileUtils.moveFiles(sourcePath, destinationPath, extention);
 				
 			}
 			else if(annotation instanceof CopyFile){
-				String sourceName = ((CopyFile) annotation).source();
-				String destinationName = ((CopyFile) annotation).destination();
+				String sourcePath = ((CopyFile) annotation).source();
+				String destinationPath = ((CopyFile) annotation).destination();
 				String fileName = ((CopyFile) annotation).filename();
 				String extention = ((CopyFile) annotation).regexpression();
-				System.out.println("sourceName: "+sourceName );
-				System.out.println("destinationName: "+destinationName );
+				System.out.println("sourcePath: "+sourcePath );
+				System.out.println("destinationPath: "+destinationPath );
 				System.out.println("fileName: "+fileName );
 				System.out.println("extention: "+extention );
 				
-				FileUtils.copyFiles(sourceName, destinationName, extention);
+				FileUtils.copyFiles(sourcePath, destinationPath, extention);
+				
+			}
+			else if(annotation instanceof DeleteFile){
+				String sourcePath = ((DeleteFile) annotation).source();
+				String fileName = ((DeleteFile) annotation).filename();
+				String extention = ((DeleteFile) annotation).regexpression();
+				System.out.println("sourcePath: "+sourcePath );
+				System.out.println("fileName: "+fileName );
+				System.out.println("extention: "+extention );
+				
+				FileUtils.deleteFiles(sourcePath, extention);
+				
+			}
+			else if(annotation instanceof RenameFile){
+				String sourcePath = ((RenameFile) annotation).source();
+				String fileName = ((RenameFile) annotation).filename();
+				String rename =((RenameFile) annotation).rename();
+				String extention = ((RenameFile) annotation).regexpression();
+				System.out.println("sourcePath: "+sourcePath );
+				System.out.println("fileName: "+fileName );
+				System.out.println("rename: "+rename );
+				System.out.println("extention: "+extention );
+				
+				FileUtils.renameFiles(sourcePath,rename, extention);
 				
 			}
 		}

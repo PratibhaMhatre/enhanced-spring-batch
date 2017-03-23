@@ -10,8 +10,10 @@ import java.util.Date;
 import org.springframework.stereotype.Component;
 
 import com.accenture.spring.batch.annotation.CopyFile;
+import com.accenture.spring.batch.annotation.DeleteFile;
 import com.accenture.spring.batch.annotation.FileTransfer;
 import com.accenture.spring.batch.annotation.MoveFile;
+import com.accenture.spring.batch.annotation.RenameFile;
 import com.accenture.spring.batch.annotation.ReplaceQuoteWithSpace;
 import com.accenture.spring.batch.annotation.StringToDate;
 import com.accenture.spring.batch.annotation.StringToTimestamp;
@@ -46,25 +48,79 @@ public class Employee {
 
 	private Timestamp dteTimestamp;
 	
-	@CopyFile(source="C:\\Users\\shruti.mukesh.sethia\\FileMovementTest\\File1\\", destination="C:\\Users\\shruti.mukesh.sethia\\FileMovementTest\\File2\\" ,filename="abc" ,regexpression="*.txt")
-	private String List;
+	@MoveFile(source="C:\\Users\\shruti.mukesh.sethia\\FileMovementTest\\Move\\File1\\", destination="C:\\Users\\shruti.mukesh.sethia\\FileMovementTest\\Move\\File2\\" ,filename="abc" ,regexpression="*.txt")
+	private String moveList;
+	
+	@CopyFile(source="C:\\Users\\shruti.mukesh.sethia\\FileMovementTest\\Copy\\File1\\", destination="C:\\Users\\shruti.mukesh.sethia\\FileMovementTest\\Copy\\File2\\" ,filename="abc" ,regexpression="*.txt")
+	private String copyList;
+	
+	@DeleteFile(source="C:\\Users\\shruti.mukesh.sethia\\FileMovementTest\\Delete\\File1\\",filename="abc" ,regexpression="*.txt")
+	private String delList;
+	
+	@RenameFile(source="C:\\Users\\shruti.mukesh.sethia\\FileMovementTest\\Rename\\File1\\",filename="abc", rename="pqr" ,regexpression="*.txt")
+	private String renameList;
+	
 
-	/**
-	 * @return the list
-	 */
-	public String getList() {
-		return List;
-	}
 
-	/**
-	 * @param list the list to set
-	 */
-	public void setList(String list) {
-		List = list;
-	}
 
 	public String getName() {
 		return name;
+	}
+
+	/**
+	 * @return the moveList
+	 */
+	public String getMoveList() {
+		return moveList;
+	}
+
+	/**
+	 * @param moveList the moveList to set
+	 */
+	public void setMoveList(String moveList) {
+		this.moveList = moveList;
+	}
+
+	/**
+	 * @return the copyList
+	 */
+	public String getCopyList() {
+		return copyList;
+	}
+
+	/**
+	 * @param copyList the copyList to set
+	 */
+	public void setCopyList(String copyList) {
+		this.copyList = copyList;
+	}
+
+	/**
+	 * @return the delList
+	 */
+	public String getDelList() {
+		return delList;
+	}
+
+	/**
+	 * @param delList the delList to set
+	 */
+	public void setDelList(String delList) {
+		this.delList = delList;
+	}
+
+	/**
+	 * @return the renameList
+	 */
+	public String getRenameList() {
+		return renameList;
+	}
+
+	/**
+	 * @param renameList the renameList to set
+	 */
+	public void setRenameList(String renameList) {
+		this.renameList = renameList;
 	}
 
 	public void setName(String name) {
