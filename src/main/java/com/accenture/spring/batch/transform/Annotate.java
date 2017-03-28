@@ -24,6 +24,7 @@ import com.accenture.spring.batch.annotation.CopyFile;
 import com.accenture.spring.batch.annotation.DeleteFile;
 import com.accenture.spring.batch.annotation.FileTransfer;
 import com.accenture.spring.batch.annotation.MoveFile;
+import com.accenture.spring.batch.annotation.PurgeData;
 import com.accenture.spring.batch.annotation.RenameFile;
 import com.accenture.spring.batch.annotation.ReplaceQuoteWithSpace;
 import com.accenture.spring.batch.annotation.StringToDate;
@@ -216,6 +217,19 @@ for (final Object annotatedClass : annotatedClasses.values()) {
 				System.out.println("extention: "+extention );
 				
 				FileUtils.renameFiles(sourcePath,rename, extention);
+				
+			}
+			else if(annotation instanceof PurgeData){
+				String archivePath = ((PurgeData) annotation).archiveDir();
+				String fileName = ((PurgeData) annotation).filename();
+				int purgeDuration =((PurgeData) annotation).purgeDuration();
+				String extention = ((PurgeData) annotation).regexpression();
+				System.out.println("archivePath: "+archivePath );
+				System.out.println("fileName: "+fileName );
+				System.out.println("purgeDuration: "+purgeDuration );
+				System.out.println("extention: "+extention );
+				
+				FileUtils.purgeNdayOldFiles(archivePath,extention, purgeDuration);
 				
 			}
 		}

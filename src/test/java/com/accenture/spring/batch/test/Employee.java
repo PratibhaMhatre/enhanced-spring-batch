@@ -13,6 +13,7 @@ import com.accenture.spring.batch.annotation.CopyFile;
 import com.accenture.spring.batch.annotation.DeleteFile;
 import com.accenture.spring.batch.annotation.FileTransfer;
 import com.accenture.spring.batch.annotation.MoveFile;
+import com.accenture.spring.batch.annotation.PurgeData;
 import com.accenture.spring.batch.annotation.RenameFile;
 import com.accenture.spring.batch.annotation.ReplaceQuoteWithSpace;
 import com.accenture.spring.batch.annotation.StringToDate;
@@ -60,7 +61,8 @@ public class Employee {
 	@RenameFile(source="C:\\Users\\shruti.mukesh.sethia\\FileMovementTest\\Rename\\File1\\",filename="abc", rename="pqr" ,regexpression="*.txt")
 	private String renameList;
 	
-
+	@PurgeData(archiveDir="C:\\Users\\shruti.mukesh.sethia\\FileMovementTest\\Purge\\File1\\",filename="abc", purgeDuration=1 ,regexpression="*.txt")
+	private String purgeList;
 
 
 	public String getName() {
