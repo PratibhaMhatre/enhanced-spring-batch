@@ -31,6 +31,8 @@ import com.accenture.spring.batch.annotation.StringToDate;
 import com.accenture.spring.batch.annotation.StringToTimestamp;
 import com.accenture.spring.batch.annotation.Transform;
 import com.accenture.spring.batch.annotation.Trim;
+import com.accenture.spring.batch.annotation.UtilDateToSqlDate;
+import com.accenture.spring.batch.annotation.UtilDateToSqlTimestamp;
 import com.accenture.spring.batch.utils.FileUtils;
 
 /**
@@ -61,14 +63,14 @@ public class Annotate {
 
 			for (Method method : methods) {
 				for (Field field : fields) {
-					
-					String methodName=method.getName();
-					String fieldName=field.getName();
 
-					if (methodName.equalsIgnoreCase("get"+fieldName)) {
+					String methodName = method.getName();
+					String fieldName = field.getName();
+
+					if (methodName.equalsIgnoreCase("get" + fieldName)) {
 						getterMap.put(field.getName(), method);
 					}
-					if (methodName.equalsIgnoreCase("set"+fieldName)) {
+					if (methodName.equalsIgnoreCase("set" + fieldName)) {
 						setterMap.put(field.getName(), method);
 					}
 				}
@@ -116,8 +118,7 @@ public class Annotate {
 					} else if (annotation instanceof StringToTimestamp) {
 						String value = (String) getMethod.invoke(obj);
 						System.out.println("value1: " + value);
-						SimpleDateFormat dateFormat = new SimpleDateFormat(
-								"yyyy-MM-dd HH:mm:ss.SSS");
+						SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 						Date parsedDate = null;
 						Timestamp timestamp = null;
 						if (StringUtils.isBlank(value)) {
@@ -132,10 +133,120 @@ public class Annotate {
 						String timestampName = ((StringToTimestamp) annotation).value();
 						System.out.println("timestamp: " + timestampName);
 
-						Method setMethod1 = setterMap.get(timestampName);
-						System.out.println("setMethod1: " + setMethod1);
-						setMethod1.invoke(obj, timestamp);
-						
+						Method setMethod2 = setterMap.get(timestampName);
+						System.out.println("setMethod2: " + setMethod2);
+						setMethod2.invoke(obj, timestamp);
+
+					} else if (annotation instanceof UtilDateToSqlDate) {
+						java.sql.Date sqlDate = null;
+						Date value = (Date) getMethod.invoke(obj);
+						System.out.println("value2: " + value);
+						if (value != null) {
+							sqlDate = new java.sql.Date(value.getTime());
+						}
+						String utilDateName = ((UtilDateToSqlDate) annotation).value();
+						System.out.println("utilDate: " + utilDateName);
+						Method setMethod3 = setterMap.get(utilDateName);
+						System.out.println("setMethod3: " + setMethod3);
+						setMethod3.invoke(obj, sqlDate);
+
+					} else if (annotation instanceof UtilDateToSqlTimestamp) {
+						Timestamp sqlTimestamp = null;
+						Date value = (Date) getMethod.invoke(obj);
+						System.out.println("value3: " + value);
+						if (value != null) {
+							sqlTimestamp = new java.sql.Timestamp(value.getTime());
+
+						}
+						String utilTimestampName = ((UtilDateToSqlTimestamp) annotation).value();
+						System.out.println("utilDate: " + utilTimestampName);
+						Method setMethod4 = setterMap.get(utilTimestampName);
+						System.out.println("setMethod4: " + setMethod4);
+						setMethod4.invoke(obj, sqlTimestamp);
+					}
+				}
+			}
+
+		}
+		return obj;
+
+	}
+
+	public Object fileTransfer(Object obj) throws IllegalAccessException, IllegalArgumentException,
+			InvocationTargetException, NoSuchMethodException, SecurityException {
+
+		context = new ClassPathXmlApplicationContext("applicationContext.xml");
+
+		final Map<String, Object> annotatedClasses = context.getBeansWithAnnotation(FileTransfer.class);
+
+		for (final Object annotatedClass : annotatedClasses.values()) {
+
+			Field[] fields = annotatedClass.getClass().getDeclaredFields();
+
+			for (Field field : fields) {
+
+				Annotation[] annotations = field.getDeclaredAnnotations();
+
+				for (Annotation annotation : annotations) {
+					String name = field.getName();
+					System.out.println("Name: " + name);
+					if (annotation instanceof MoveFile) {
+						String sourcePath = ((MoveFile) annotation).source();
+						String destinationPath = ((MoveFile) annotation).destination();
+						String fileName = ((MoveFile) annotation).filename();
+						String extention = ((MoveFile) annotation).regexpression();
+						System.out.println("sourcePath: " + sourcePath);
+						System.out.println("destinationPath: " + destinationPath);
+						System.out.println("fileName: " + fileName);
+						System.out.println("extention: " + extention);
+
+						FileUtils.moveFiles(sourcePath, destinationPath, extention);
+
+					} else if (annotation instanceof CopyFile) {
+						String sourcePath = ((CopyFile) annotation).source();
+						String destinationPath = ((CopyFile) annotation).destination();
+						String fileName = ((CopyFile) annotation).filename();
+						String extention = ((CopyFile) annotation).regexpression();
+						System.out.println("sourcePath: " + sourcePath);
+						System.out.println("destinationPath: " + destinationPath);
+						System.out.println("fileName: " + fileName);
+						System.out.println("extention: " + extention);
+
+						FileUtils.copyFiles(sourcePath, destinationPath, extention);
+
+					} else if (annotation instanceof DeleteFile) {
+						String sourcePath = ((DeleteFile) annotation).source();
+						String fileName = ((DeleteFile) annotation).filename();
+						String extention = ((DeleteFile) annotation).regexpression();
+						System.out.println("sourcePath: " + sourcePath);
+						System.out.println("fileName: " + fileName);
+						System.out.println("extention: " + extention);
+
+						FileUtils.deleteFiles(sourcePath, extention);
+
+					} else if (annotation instanceof RenameFile) {
+						String sourcePath = ((RenameFile) annotation).source();
+						String fileName = ((RenameFile) annotation).filename();
+						String rename = ((RenameFile) annotation).rename();
+						String extention = ((RenameFile) annotation).regexpression();
+						System.out.println("sourcePath: " + sourcePath);
+						System.out.println("fileName: " + fileName);
+						System.out.println("rename: " + rename);
+						System.out.println("extention: " + extention);
+
+						FileUtils.renameFiles(sourcePath, rename, extention);
+
+					} else if (annotation instanceof PurgeData) {
+						String archivePath = ((PurgeData) annotation).archiveDir();
+						String fileName = ((PurgeData) annotation).filename();
+						int purgeDuration = ((PurgeData) annotation).purgeDuration();
+						String extention = ((PurgeData) annotation).regexpression();
+						System.out.println("archivePath: " + archivePath);
+						System.out.println("fileName: " + fileName);
+						System.out.println("purgeDuration: " + purgeDuration);
+						System.out.println("extention: " + extention);
+
+						FileUtils.purgeNdayOldFiles(archivePath, extention, purgeDuration);
 
 					}
 				}
@@ -146,99 +257,5 @@ public class Annotate {
 		return obj;
 
 	}
-	
-	public Object fileTransfer(Object obj) throws IllegalAccessException, IllegalArgumentException,
-	InvocationTargetException, NoSuchMethodException, SecurityException {
-
-context = new ClassPathXmlApplicationContext("applicationContext.xml");
-
-final Map<String, Object> annotatedClasses = context.getBeansWithAnnotation(FileTransfer.class);
-
-for (final Object annotatedClass : annotatedClasses.values()) {
-
-	
-	Field[] fields = annotatedClass.getClass().getDeclaredFields();
-
-	
-	
-
-	for (Field field : fields) {
-
-		Annotation[] annotations = field.getDeclaredAnnotations();
-
-		for (Annotation annotation : annotations) {
-			String name = field.getName();
-		System.out.println("Name: "+name );
-			if (annotation instanceof MoveFile) {
-				String sourcePath = ((MoveFile) annotation).source();
-				String destinationPath = ((MoveFile) annotation).destination();
-				String fileName = ((MoveFile) annotation).filename();
-				String extention = ((MoveFile) annotation).regexpression();
-				System.out.println("sourcePath: "+sourcePath );
-				System.out.println("destinationPath: "+destinationPath );
-				System.out.println("fileName: "+fileName );
-				System.out.println("extention: "+extention );
-				
-				FileUtils.moveFiles(sourcePath, destinationPath, extention);
-				
-			}
-			else if(annotation instanceof CopyFile){
-				String sourcePath = ((CopyFile) annotation).source();
-				String destinationPath = ((CopyFile) annotation).destination();
-				String fileName = ((CopyFile) annotation).filename();
-				String extention = ((CopyFile) annotation).regexpression();
-				System.out.println("sourcePath: "+sourcePath );
-				System.out.println("destinationPath: "+destinationPath );
-				System.out.println("fileName: "+fileName );
-				System.out.println("extention: "+extention );
-				
-				FileUtils.copyFiles(sourcePath, destinationPath, extention);
-				
-			}
-			else if(annotation instanceof DeleteFile){
-				String sourcePath = ((DeleteFile) annotation).source();
-				String fileName = ((DeleteFile) annotation).filename();
-				String extention = ((DeleteFile) annotation).regexpression();
-				System.out.println("sourcePath: "+sourcePath );
-				System.out.println("fileName: "+fileName );
-				System.out.println("extention: "+extention );
-				
-				FileUtils.deleteFiles(sourcePath, extention);
-				
-			}
-			else if(annotation instanceof RenameFile){
-				String sourcePath = ((RenameFile) annotation).source();
-				String fileName = ((RenameFile) annotation).filename();
-				String rename =((RenameFile) annotation).rename();
-				String extention = ((RenameFile) annotation).regexpression();
-				System.out.println("sourcePath: "+sourcePath );
-				System.out.println("fileName: "+fileName );
-				System.out.println("rename: "+rename );
-				System.out.println("extention: "+extention );
-				
-				FileUtils.renameFiles(sourcePath,rename, extention);
-				
-			}
-			else if(annotation instanceof PurgeData){
-				String archivePath = ((PurgeData) annotation).archiveDir();
-				String fileName = ((PurgeData) annotation).filename();
-				int purgeDuration =((PurgeData) annotation).purgeDuration();
-				String extention = ((PurgeData) annotation).regexpression();
-				System.out.println("archivePath: "+archivePath );
-				System.out.println("fileName: "+fileName );
-				System.out.println("purgeDuration: "+purgeDuration );
-				System.out.println("extention: "+extention );
-				
-				FileUtils.purgeNdayOldFiles(archivePath,extention, purgeDuration);
-				
-			}
-		}
-
-	}
-
-}
-return obj;
-
-}
 
 }

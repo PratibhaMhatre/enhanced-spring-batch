@@ -20,10 +20,12 @@ import com.accenture.spring.batch.annotation.StringToDate;
 import com.accenture.spring.batch.annotation.StringToTimestamp;
 import com.accenture.spring.batch.annotation.Transform;
 import com.accenture.spring.batch.annotation.Trim;
+import com.accenture.spring.batch.annotation.UtilDateToSqlDate;
+import com.accenture.spring.batch.annotation.UtilDateToSqlTimestamp;
 
 /**
- * POJO class
- * Contains Getter and Setter of fields
+ * POJO class Contains 
+ * Getter and Setter of fields
  * 
  * @author aparna.satpathy,shruti.mukesh.sethia
  * 
@@ -43,27 +45,36 @@ public class Employee {
 	private String payDate;
 
 	private Date dtePayDate;
-	
+
 	@StringToTimestamp(value = "dteTimestamp")
 	private String payTimestamp;
 
 	private Timestamp dteTimestamp;
-	
-	@MoveFile(source="C:\\Users\\shruti.mukesh.sethia\\FileMovementTest\\Move\\File1\\", destination="C:\\Users\\shruti.mukesh.sethia\\FileMovementTest\\Move\\File2\\" ,filename="abc" ,regexpression="*.txt")
+
+	@MoveFile(source = "C:\\Users\\shruti.mukesh.sethia\\FileMovementTest\\Move\\File1\\", destination = "C:\\Users\\shruti.mukesh.sethia\\FileMovementTest\\Move\\File2\\", filename = "abc", regexpression = "*.txt")
 	private String moveList;
-	
-	@CopyFile(source="C:\\Users\\shruti.mukesh.sethia\\FileMovementTest\\Copy\\File1\\", destination="C:\\Users\\shruti.mukesh.sethia\\FileMovementTest\\Copy\\File2\\" ,filename="abc" ,regexpression="*.txt")
+
+	@CopyFile(source = "C:\\Users\\shruti.mukesh.sethia\\FileMovementTest\\Copy\\File1\\", destination = "C:\\Users\\shruti.mukesh.sethia\\FileMovementTest\\Copy\\File2\\", filename = "abc", regexpression = "*.txt")
 	private String copyList;
-	
-	@DeleteFile(source="C:\\Users\\shruti.mukesh.sethia\\FileMovementTest\\Delete\\File1\\",filename="abc" ,regexpression="*.txt")
+
+	@DeleteFile(source = "C:\\Users\\shruti.mukesh.sethia\\FileMovementTest\\Delete\\File1\\", filename = "abc", regexpression = "*.txt")
 	private String delList;
-	
-	@RenameFile(source="C:\\Users\\shruti.mukesh.sethia\\FileMovementTest\\Rename\\File1\\",filename="abc", rename="pqr" ,regexpression="*.txt")
+
+	@RenameFile(source = "C:\\Users\\shruti.mukesh.sethia\\FileMovementTest\\Rename\\File1\\", filename = "abc", rename = "pqr", regexpression = "*.txt")
 	private String renameList;
-	
-	@PurgeData(archiveDir="C:\\Users\\shruti.mukesh.sethia\\FileMovementTest\\Purge\\File1\\",filename="abc", purgeDuration=1 ,regexpression="*.txt")
+
+	@PurgeData(archiveDir = "C:\\Users\\shruti.mukesh.sethia\\FileMovementTest\\Purge\\File1\\", filename = "abc", purgeDuration = 1, regexpression = "*.txt")
 	private String purgeList;
 
+	@UtilDateToSqlDate(value = "sqlDate")
+	private Date utilDate;
+
+	private java.sql.Date sqlDate;
+
+	@UtilDateToSqlTimestamp(value = "sqlTimestamp")
+	private Date utilTimestampDate;
+
+	private java.sql.Timestamp sqlTimestamp;
 
 	public String getName() {
 		return name;
@@ -77,7 +88,8 @@ public class Employee {
 	}
 
 	/**
-	 * @param moveList the moveList to set
+	 * @param moveList
+	 *            the moveList to set
 	 */
 	public void setMoveList(String moveList) {
 		this.moveList = moveList;
@@ -91,7 +103,8 @@ public class Employee {
 	}
 
 	/**
-	 * @param copyList the copyList to set
+	 * @param copyList
+	 *            the copyList to set
 	 */
 	public void setCopyList(String copyList) {
 		this.copyList = copyList;
@@ -105,7 +118,8 @@ public class Employee {
 	}
 
 	/**
-	 * @param delList the delList to set
+	 * @param delList
+	 *            the delList to set
 	 */
 	public void setDelList(String delList) {
 		this.delList = delList;
@@ -119,7 +133,8 @@ public class Employee {
 	}
 
 	/**
-	 * @param renameList the renameList to set
+	 * @param renameList
+	 *            the renameList to set
 	 */
 	public void setRenameList(String renameList) {
 		this.renameList = renameList;
@@ -175,13 +190,13 @@ public class Employee {
 	}
 
 	/**
-	 * @param payTimestamp the payTimestamp to set
+	 * @param payTimestamp
+	 *            the payTimestamp to set
 	 */
 	public void setPayTimestamp(String payTimestamp) {
 		this.payTimestamp = payTimestamp;
 	}
 
-	
 	/**
 	 * @return the dteTimestamp
 	 */
@@ -190,15 +205,77 @@ public class Employee {
 	}
 
 	/**
-	 * @param dteTimestamp the dteTimestamp to set
+	 * @param dteTimestamp
+	 *            the dteTimestamp to set
 	 */
 	public void setDteTimestamp(Timestamp dteTimestamp) {
 		this.dteTimestamp = dteTimestamp;
 	}
 
+	/**
+	 * @return the utilDate
+	 */
+	public Date getUtilDate() {
+		return utilDate;
+	}
+
+	/**
+	 * @param utilDate
+	 *            the utilDate to set
+	 */
+	public void setUtilDate(Date utilDate) {
+		this.utilDate = utilDate;
+	}
+
+	/**
+	 * @return the sqlDate
+	 */
+	public java.sql.Date getSqlDate() {
+		return sqlDate;
+	}
+
+	/**
+	 * @param sqlDate
+	 *            the sqlDate to set
+	 */
+	public void setSqlDate(java.sql.Date sqlDate) {
+		this.sqlDate = sqlDate;
+	}
+
+	/**
+	 * @return the utilTimestampDate
+	 */
+	public Date getUtilTimestampDate() {
+		return utilTimestampDate;
+	}
+
+	/**
+	 * @param utilTimestampDate
+	 *            the utilTimestampDate to set
+	 */
+	public void setUtilTimestampDate(Date utilTimestampDate) {
+		this.utilTimestampDate = utilTimestampDate;
+	}
+
+	/**
+	 * @return the sqlTimestamp
+	 */
+	public java.sql.Timestamp getSqlTimestamp() {
+		return sqlTimestamp;
+	}
+
+	/**
+	 * @param sqlTimestamp
+	 *            the sqlTimestamp to set
+	 */
+	public void setSqlTimestamp(java.sql.Timestamp sqlTimestamp) {
+		this.sqlTimestamp = sqlTimestamp;
+	}
+
 	@Override
 	public String toString() {
-		return "Employee [name=" + name + ", email=" + email + ", dtePayDate=" + dtePayDate + ", dteTimestamp=" + dteTimestamp + "]";
+		return "Employee [name=" + name + ", email=" + email + ", dtePayDate=" + dtePayDate + ", dteTimestamp="
+				+ dteTimestamp + ", sqlDate=" + sqlDate + ", sqlTimestamp=" + sqlTimestamp + "]";
 	}
 
 }
