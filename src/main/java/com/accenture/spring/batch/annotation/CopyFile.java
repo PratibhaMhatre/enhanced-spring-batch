@@ -1,5 +1,12 @@
 package com.accenture.spring.batch.annotation;
 
+/**
+ * Copies the file To the requested destination path 
+ * 
+ * 
+ * @author Shruti Sethia
+ * @param source,destination,filename,regexpression
+ */
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

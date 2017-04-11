@@ -10,7 +10,7 @@ public enum ExceptionCodes {
 		INVALID_NUMBER_FORMAT(
 			"C003", "Number format is invalid."), FALED_INTEGRITY_CHK(
 			"C004", "Files failed integrity check"), NO_INTEGRITY_CHK(
-			"C005", "no Files integrity check"), FAILED_ININ_DECRYPTION(
+			"C005", "no Files integrity check"), FAILED_STREAM_CREATION(
 			"C006", "Exception occurred while creating Input/Output Stream "), FAILED_BCPROVIDER_LOADING(
 			"C007",
 			"Exception occurred while loading Bouncy Castle Provider "), FAILED_ENCRYPTION_DECRYPTION(
@@ -24,7 +24,8 @@ public enum ExceptionCodes {
 			"C014", "Public key for Files not found."), FAILED_CRYPTO_LOADING(
 			"C015", "Error while Loading Cryptography settings"), FAILED_PROPRTY_LOADING(
 			"C016", "Exception occurred while decrypting file"), FAILED_PROTECTION(
-			"C017", "Input File is missing.");
+			"C017", "Input File is missing."),FAILED_DECRYPTION(
+					"DDC007", "Exception occurred while decrypting file");
 
 	private final String id;
 	private final String msg;

@@ -1,4 +1,4 @@
-package com.accenture.spring.batch.utils;
+package com.accenture.spring.batch.util;
 
 import java.io.File;
 import java.io.FileFilter;

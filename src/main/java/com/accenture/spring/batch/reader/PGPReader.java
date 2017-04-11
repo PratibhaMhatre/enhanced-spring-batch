@@ -1,96 +1,226 @@
 package com.accenture.spring.batch.reader;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.security.NoSuchProviderException;
+import java.util.ArrayList;
+
+import org.bouncycastle.openpgp.PGPException;
+import org.bouncycastle.openpgp.PGPPublicKey;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.core.io.InputStreamResource;
 
+import com.accenture.spring.batch.Exception.ExceptionCodes;
+import com.accenture.spring.batch.Exception.SpringBtachException;
+import com.accenture.spring.batch.contant.Constants;
+import com.accenture.spring.batch.security.decryption.FileDecrypter;
+import com.accenture.spring.batch.security.encryption.FileEncrypter;
+import com.accenture.spring.batch.util.JavaUtil;
 import com.accenture.spring.batch.util.SecurityUtil;
 
 /**
- * FlatFileItemReader implementation which reads encrypted GPG files
- * PGPReader needs to be Step Scoped if isCompressed is true
- * @author Omkar Marathe
+ * FlatFileItemReader implementation which reads encrypted GPG files PGPReader
+ * needs to be Step Scoped if isCompressed is true
+ * 
+ * @author Shruti Sethia
  * @since 0.0.1
  */
-public class PGPReader extends FlatFileItemReader<Object> implements InitializingBean{
+public class PGPReader extends FlatFileItemReader<Object> implements InitializingBean {
 
-	private boolean isCompressed;
-	private String passphrase1;
+	private boolean isCompressed = true;
+	private String passphrase;
 	private String secretKeyFilePath;
-	private String publicKeyFilePath; //Can be null if isCompressed is false
-	private String passphrase2;       //Can be null if isCompressed is false
+	private String publicKeyFilePath;
+	private String publicKeyUserId;
+	private String inputFilePath;
 	
+	// private Resource resource;
+	
+
 	public PGPReader() {
 		SecurityUtil.loadSecuritySetting();
 	}
-	
+
 	/**
 	 * @return the isCompressed
 	 */
 	public boolean isCompressed() {
 		return isCompressed;
 	}
+
 	/**
-	 * @param isCompressed the isCompressed to set
+	 * @param isCompressed
+	 *            the isCompressed to set
 	 */
 	public void setCompressed(boolean isCompressed) {
 		this.isCompressed = isCompressed;
 	}
+
 	/**
-	 * @return the passphrase1
+	 * @return the passphrase
 	 */
-	public String getPassphrase1() {
-		return passphrase1;
+	public String getPassphrase() {
+		return passphrase;
 	}
+
 	/**
-	 * @param passphrase1 the passphrase1 to set
+	 * @param passphrase
+	 *            the passphrase to set
 	 */
-	public void setPassphrase1(String passphrase1) {
-		this.passphrase1 = passphrase1;
+	public void setPassphrase(String passphrase) {
+		this.passphrase = passphrase;
 	}
+
 	/**
 	 * @return the secretKeyFilePath
 	 */
 	public String getSecretKeyFilePath() {
 		return secretKeyFilePath;
 	}
+
 	/**
-	 * @param secretKeyFilePath the secretKeyFilePath to set
+	 * @param secretKeyFilePath
+	 *            the secretKeyFilePath to set
 	 */
 	public void setSecretKeyFilePath(String secretKeyFilePath) {
 		this.secretKeyFilePath = secretKeyFilePath;
 	}
+
 	/**
 	 * @return the publicKeyFilePath
 	 */
 	public String getPublicKeyFilePath() {
 		return publicKeyFilePath;
 	}
+
 	/**
-	 * @param publicKeyFilePath the publicKeyFilePath to set
+	 * @param publicKeyFilePath
+	 *            the publicKeyFilePath to set
 	 */
 	public void setPublicKeyFilePath(String publicKeyFilePath) {
 		this.publicKeyFilePath = publicKeyFilePath;
 	}
+
 	/**
-	 * @return the passphrase2
+	 * @return the publicKeyUserId
 	 */
-	public String getPassphrase2() {
-		return passphrase2;
+	public String getPublicKeyUserId() {
+		return publicKeyUserId;
 	}
+
 	/**
-	 * @param passphrase2 the passphrase2 to set
+	 * @param publicKeyUserId
+	 *            the publicKeyUserId to set
 	 */
-	public void setPassphrase2(String passphrase2) {
-		this.passphrase2 = passphrase2;
+	public void setPublicKeyUserId(String publicKeyUserId) {
+		this.publicKeyUserId = publicKeyUserId;
 	}
-	
+
+	/**
+	 * @return the inputFilePath
+	 */
+	public String getInputFilePath() {
+		return inputFilePath;
+	}
+
+	/**
+	 * @param inputFilePath
+	 *            the inputFilePath to set
+	 */
+	public void setInputFilePath(String inputFilePath) {
+		this.inputFilePath = inputFilePath;
+	}
+
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		super.afterPropertiesSet();
-		if(this.isCompressed){
-			// TODO Check if isCompressed is true, then generate intermediate file & change/override the input resource
+		FileDecrypter fileDecrypter = new FileDecrypter();
+
+		if (this.isCompressed) {
+			// TODO Check if isCompressed is true, then generate intermediate
+			// file & change/override the input resource
+
+			this.uncompressFile(fileDecrypter.decryptFile(inputFilePath, secretKeyFilePath, passphrase.toCharArray(),
+					"sample.txt", true, 2));
+
 			
+			inputFilePath = inputFilePath + Constants.INBOUND_UNC_FILE;
+
+		}
+
+		InputStream clearStream = fileDecrypter.decryptFile(inputFilePath, secretKeyFilePath, passphrase.toCharArray(),
+				"sample.txt", false, 2);
+
+		System.out.println(clearStream);
+
+		InputStreamResource in = new InputStreamResource(clearStream);
+		System.out.println("input Stream"+in);
+
+		this.setResource(in);
+
+	}
+
+	public void uncompressFile(InputStream unc) throws IOException, NoSuchProviderException, PGPException {
+
+		BufferedReader bufferRead = new BufferedReader(new InputStreamReader(unc));
+
+		ArrayList<String> rawdata = new ArrayList<String>();
+		FileEncrypter fileEncrypter = new FileEncrypter();
+
+		PGPPublicKey encKey;
+
+		String outFileName = inputFilePath + Constants.INBOUND_UNC_FILE;
+
+		if (JavaUtil.isObjectNull(publicKeyFilePath)) {
+			try {
+				throw new SpringBtachException(ExceptionCodes.PUBLIC_KEY_NOTFOUND, "For DDC Public Key Path");
+			} catch (SpringBtachException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		encKey = SecurityUtil.readPublicKey(publicKeyFilePath, publicKeyUserId);
+
+		String line = bufferRead.readLine();
+
+		while (line != null) {
+			if (rawdata.size() < Constants.batchSize) {
+				rawdata.add(line + "\n");
+			} else if (rawdata.size() == Constants.batchSize) {
+				rawdata.add(line + "\n");
+				StringBuilder RecordsBuilder = new StringBuilder();
+				for (String record : rawdata) {
+					RecordsBuilder.append(record);
+				}
+				fileEncrypter.encryptBigText(outFileName, RecordsBuilder.toString(), encKey, false, true);
+				// Clearing ArrayList after every chunk is encrypted
+				rawdata.clear();
+			}
+			line = bufferRead.readLine();
+			if (line == null) {
+				for (String record : rawdata) {
+
+					if (rawdata.size() > 0) {
+						fileEncrypter.encryptBigText(outFileName, record, encKey, false, true);
+					}
+				}
+				rawdata.clear();
+			}
+		}
+
+		if (rawdata.size() > 0) {
+			for (String record : rawdata) {
+				fileEncrypter.encryptBigText(outFileName, record, encKey, false, true);
+			}
+		}
+
+		FileEncrypter.setCalledForFirstTime(false);
+		FileEncrypter.closeStreams();
+		if (!JavaUtil.isObjectNull(FileEncrypter.fBufferedOut)) {
+			FileEncrypter.fBufferedOut.close();
 		}
 	}
-	
-	
 }

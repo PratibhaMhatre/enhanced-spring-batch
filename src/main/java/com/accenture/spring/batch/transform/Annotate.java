@@ -33,7 +33,7 @@ import com.accenture.spring.batch.annotation.Transform;
 import com.accenture.spring.batch.annotation.Trim;
 import com.accenture.spring.batch.annotation.UtilDateToSqlDate;
 import com.accenture.spring.batch.annotation.UtilDateToSqlTimestamp;
-import com.accenture.spring.batch.utils.FileUtils;
+import com.accenture.spring.batch.util.FileUtils;
 
 /**
  * Implementation of Annotated Fields
