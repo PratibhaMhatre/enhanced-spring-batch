@@ -33,7 +33,7 @@ import org.bouncycastle.openpgp.operator.jcajce.JcePublicKeyDataDecryptorFactory
 import org.springframework.beans.factory.annotation.Value;
 
 import com.accenture.spring.batch.Exception.ExceptionCodes;
-import com.accenture.spring.batch.Exception.SpringBtachException;
+import com.accenture.spring.batch.Exception.SpringBatchException;
 import com.accenture.spring.batch.contant.Constants;
 import com.accenture.spring.batch.util.SecurityUtil;
 
@@ -55,28 +55,27 @@ public class FileDecrypter {
     public static int batchSize; 
     
     public InputStream decryptFile(String inputFileName, String keyFileName,
-                                                       char[] passwd, String defaultFileName, boolean decryptWithCompress, int job) throws SpringBtachException {
+                                                       char[] passwd, String defaultFileName, boolean decryptWithCompress, int job) throws SpringBatchException {
         InputStream in = null;
         InputStream keyIn = null;
         BufferedReader br;
         
-        System.out.println("inputFileName :: "+inputFileName);
         
 
         try {
             if (StringUtils.isEmpty(inputFileName)) {
-                throw new SpringBtachException(ExceptionCodes.EMPTY_FIELD_VALUE, "Input File Name");
+                throw new SpringBatchException(ExceptionCodes.EMPTY_FIELD_VALUE, "Input File Name");
             }
             if (StringUtils.isEmpty(keyFileName)) {
-                throw new SpringBtachException(ExceptionCodes.EMPTY_FIELD_VALUE, "Key File Name");
+                throw new SpringBatchException(ExceptionCodes.EMPTY_FIELD_VALUE, "Key File Name");
             }
             if (StringUtils.isEmpty(defaultFileName)) {
-                throw new SpringBtachException(ExceptionCodes.EMPTY_FIELD_VALUE, "Output File Name");
+                throw new SpringBatchException(ExceptionCodes.EMPTY_FIELD_VALUE, "Output File Name");
             }
 
             br = new BufferedReader(new FileReader(inputFileName));
             if (br.readLine() == null) {
-                throw new SpringBtachException(ExceptionCodes.EMPTY_FIELD_VALUE, "Input File is Empty");
+                throw new SpringBatchException(ExceptionCodes.EMPTY_FIELD_VALUE, "Input File is Empty");
             }
 
 
@@ -89,14 +88,14 @@ public class FileDecrypter {
 
 
         } catch (FileNotFoundException fileNotFound) {
-			throw new SpringBtachException(ExceptionCodes.FILE_NOT_FOUND, fileNotFound);
+			throw new SpringBatchException(ExceptionCodes.FILE_NOT_FOUND, fileNotFound);
 		} catch (NoSuchProviderException missingBCProv) {
-			throw new SpringBtachException(ExceptionCodes.FAILED_BCPROVIDER_LOADING,
+			throw new SpringBatchException(ExceptionCodes.FAILED_BCPROVIDER_LOADING,
 					missingBCProv);
 		} catch (IOException ioe) {
-			throw new SpringBtachException(ExceptionCodes.FAILED_STREAM_ONCLOSE, ioe);
+			throw new SpringBatchException(ExceptionCodes.FAILED_STREAM_ONCLOSE, ioe);
 		} catch (Exception e) {
-			throw new SpringBtachException(ExceptionCodes.FAILED_ENCRYPTION_DECRYPTION,
+			throw new SpringBatchException(ExceptionCodes.FAILED_ENCRYPTION_DECRYPTION,
 					e);
 		}
 
@@ -108,9 +107,8 @@ public class FileDecrypter {
      */
     private InputStream decryptFile(InputStream in, InputStream keyIn, String defaultFileName,
                                            char[] passwd, boolean decryptWithCompress, int job) throws IOException,
-            NoSuchProviderException, SpringBtachException {
+            NoSuchProviderException, SpringBatchException {
     	
-    	System.out.println("decrypt file");
 
         in = PGPUtil.getDecoderStream(in);
         JcaPGPObjectFactory pgpF;
@@ -140,7 +138,7 @@ public class FileDecrypter {
             // find the secret key
             //
             if (null == enc) {
-                throw new SpringBtachException(ExceptionCodes.UNKNOWN_FILETYPE_ERROR, "Please ensure if the contents of Input are encrypted");
+                throw new SpringBatchException(ExceptionCodes.UNKNOWN_FILETYPE_ERROR, "Please ensure if the contents of Input are encrypted");
             }
             Iterator<?> it = enc.getEncryptedDataObjects();
             pgpSec = new PGPSecretKeyRingCollection(
@@ -162,7 +160,6 @@ public class FileDecrypter {
                     .getDataStream(new JcePublicKeyDataDecryptorFactoryBuilder()
                             .setProvider(Constants.BOUNCY_CASTLE_PROVIDER).build(sKey));
             
-            System.out.println("clearStream :: "+clear);
 
             plainFact = new JcaPGPObjectFactory(clear);
 
@@ -198,7 +195,7 @@ public class FileDecrypter {
 			if (e.getUnderlyingException() != null) {
 				LOGGER.error(e.getUnderlyingException());
 			}
-			throw new SpringBtachException(ExceptionCodes.FAILED_DECRYPTION, e);
+			throw new SpringBatchException(ExceptionCodes.FAILED_DECRYPTION, e);
 
 		}
     }

@@ -38,9 +38,7 @@ public class AppTest {
 		 */
 		Annotate annotate = new Annotate();
 		try {
-			System.out.println("Employee is " + employee);
 			employee = (Employee) annotate.transform(employee);
-			System.out.println("Employee is " + employee);
 			employee = (Employee) annotate.fileTransfer(employee);
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();

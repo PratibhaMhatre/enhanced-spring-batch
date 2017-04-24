@@ -10,7 +10,7 @@ package com.accenture.spring.batch.Exception;
  * @author tkmaawv
  * @since Nov 28 2016
  */
-public class SpringBtachException extends Exception {
+public class SpringBatchException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
@@ -18,13 +18,13 @@ public class SpringBtachException extends Exception {
 	private final String errorMsg;
 	private final Object errorObject;
 
-	public SpringBtachException(ExceptionCodes code) {
+	public SpringBatchException(ExceptionCodes code) {
 		this.errorMsg = code.getMsg();
 		this.errorCode = code.getId();
 		this.errorObject = null;
 	}
 
-	public SpringBtachException(ExceptionCodes code, Object object) {
+	public SpringBatchException(ExceptionCodes code, Object object) {
 		this.errorMsg = code.getMsg();
 		this.errorCode = code.getId();
 		this.errorObject = object;

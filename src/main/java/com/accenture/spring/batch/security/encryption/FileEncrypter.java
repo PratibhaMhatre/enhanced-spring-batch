@@ -26,7 +26,7 @@ import org.bouncycastle.openpgp.operator.jcajce.JcePGPDataEncryptorBuilder;
 import org.bouncycastle.openpgp.operator.jcajce.JcePublicKeyKeyEncryptionMethodGenerator;
 
 import com.accenture.spring.batch.Exception.ExceptionCodes;
-import com.accenture.spring.batch.Exception.SpringBtachException;
+import com.accenture.spring.batch.Exception.SpringBatchException;
 import com.accenture.spring.batch.contant.Constants;
 import com.accenture.spring.batch.util.JavaUtil;
 
@@ -70,11 +70,12 @@ public class FileEncrypter {
      */
     public void encryptBigText(String fileName, String stringToBeEnc,
                                       PGPPublicKey encKey, boolean armor, boolean withIntegrityCheck) {
+    	
 
 
         try {
             if (stringToBeEnc == null) {
-                throw new SpringBtachException(ExceptionCodes.EMPTY_FIELD_VALUE, "stringToBeEnc[output] is Empty");
+                throw new SpringBatchException(ExceptionCodes.EMPTY_FIELD_VALUE, "stringToBeEnc[output] is Empty");
             }
 
 
@@ -105,7 +106,7 @@ public class FileEncrypter {
 
         } catch (PGPException e) {
         	BATCH_LOGGER.fatal(e);
-        } catch(SpringBtachException e){
+        } catch(SpringBatchException e){
         	BATCH_LOGGER.fatal(e);
         }catch (IOException io) {
         	BATCH_LOGGER.error(ExceptionCodes.FAILED_STREAM_CREATION.getMsg() , io);
@@ -196,6 +197,12 @@ public class FileEncrypter {
             if(!JavaUtil.isObjectNull(outFromComData)){
                 outFromComData.close();
             }
+            
+            if (!JavaUtil.isObjectNull(FileEncrypter.fBufferedOut)) {
+            	FileEncrypter.fBufferedOut.flush();
+            	FileEncrypter.fBufferedOut.close();
+            	FileEncrypter.fBufferedOut = null;
+			}
 
         } catch (IOException e) {
         	BATCH_LOGGER.warn("Error while closing sample Encryption Streams" ,e);

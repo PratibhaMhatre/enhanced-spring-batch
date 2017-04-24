@@ -17,13 +17,10 @@ public class App {
 
 		Job job = (Job) context.getBean("reportJob"); 
 		
-System.out.println("running job");
 		try {
 
 			JobLauncher jobLauncher = (JobLauncher) context.getBean("jobLauncher");
 			JobExecution execution = jobLauncher.run(job, new JobParameters());
-			System.out.println(execution.getAllFailureExceptions());
-			System.out.println(execution.getExitStatus());
 
 		} catch (JobExecutionException e1) {
 			e1.printStackTrace();

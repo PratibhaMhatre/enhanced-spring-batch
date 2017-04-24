@@ -93,7 +93,6 @@ public class Annotate {
 						setMethod.invoke(obj, StringUtils.replace(value, "\"", " "));
 					} else if (annotation instanceof StringToDate) {
 						String value = (String) getMethod.invoke(obj);
-						System.out.println("value: " + value);
 						Date formattedDate = null;
 
 						SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -103,21 +102,16 @@ public class Annotate {
 						try {
 
 							formattedDate = formatter.parse(value);
-							System.out.println("formattedDate: " + formattedDate);
 
 						} catch (ParseException e) {
-							System.out.println("INVALID_DATE_VALUE");
 						}
 						String dateName = ((StringToDate) annotation).value();
-						System.out.println("DateName: " + dateName);
 
 						Method setMethod1 = setterMap.get(dateName);
-						System.out.println("setMethod1: " + setMethod1);
 						setMethod1.invoke(obj, formattedDate);
 
 					} else if (annotation instanceof StringToTimestamp) {
 						String value = (String) getMethod.invoke(obj);
-						System.out.println("value1: " + value);
 						SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 						Date parsedDate = null;
 						Timestamp timestamp = null;
@@ -128,40 +122,31 @@ public class Annotate {
 							parsedDate = dateFormat.parse(value);
 							timestamp = new java.sql.Timestamp(parsedDate.getTime());
 						} catch (ParseException e) {
-							System.out.println("INVALID_DATE_VALUE");
 						}
 						String timestampName = ((StringToTimestamp) annotation).value();
-						System.out.println("timestamp: " + timestampName);
 
 						Method setMethod2 = setterMap.get(timestampName);
-						System.out.println("setMethod2: " + setMethod2);
 						setMethod2.invoke(obj, timestamp);
 
 					} else if (annotation instanceof UtilDateToSqlDate) {
 						java.sql.Date sqlDate = null;
 						Date value = (Date) getMethod.invoke(obj);
-						System.out.println("value2: " + value);
 						if (value != null) {
 							sqlDate = new java.sql.Date(value.getTime());
 						}
 						String utilDateName = ((UtilDateToSqlDate) annotation).value();
-						System.out.println("utilDate: " + utilDateName);
 						Method setMethod3 = setterMap.get(utilDateName);
-						System.out.println("setMethod3: " + setMethod3);
 						setMethod3.invoke(obj, sqlDate);
 
 					} else if (annotation instanceof UtilDateToSqlTimestamp) {
 						Timestamp sqlTimestamp = null;
 						Date value = (Date) getMethod.invoke(obj);
-						System.out.println("value3: " + value);
 						if (value != null) {
 							sqlTimestamp = new java.sql.Timestamp(value.getTime());
 
 						}
 						String utilTimestampName = ((UtilDateToSqlTimestamp) annotation).value();
-						System.out.println("utilDate: " + utilTimestampName);
 						Method setMethod4 = setterMap.get(utilTimestampName);
-						System.out.println("setMethod4: " + setMethod4);
 						setMethod4.invoke(obj, sqlTimestamp);
 					}
 				}
@@ -189,16 +174,11 @@ public class Annotate {
 
 				for (Annotation annotation : annotations) {
 					String name = field.getName();
-					System.out.println("Name: " + name);
 					if (annotation instanceof MoveFile) {
 						String sourcePath = ((MoveFile) annotation).source();
 						String destinationPath = ((MoveFile) annotation).destination();
 						String fileName = ((MoveFile) annotation).filename();
 						String extention = ((MoveFile) annotation).regexpression();
-						System.out.println("sourcePath: " + sourcePath);
-						System.out.println("destinationPath: " + destinationPath);
-						System.out.println("fileName: " + fileName);
-						System.out.println("extention: " + extention);
 
 						FileUtils.moveFiles(sourcePath, destinationPath, extention);
 
@@ -207,10 +187,6 @@ public class Annotate {
 						String destinationPath = ((CopyFile) annotation).destination();
 						String fileName = ((CopyFile) annotation).filename();
 						String extention = ((CopyFile) annotation).regexpression();
-						System.out.println("sourcePath: " + sourcePath);
-						System.out.println("destinationPath: " + destinationPath);
-						System.out.println("fileName: " + fileName);
-						System.out.println("extention: " + extention);
 
 						FileUtils.copyFiles(sourcePath, destinationPath, extention);
 
@@ -218,9 +194,6 @@ public class Annotate {
 						String sourcePath = ((DeleteFile) annotation).source();
 						String fileName = ((DeleteFile) annotation).filename();
 						String extention = ((DeleteFile) annotation).regexpression();
-						System.out.println("sourcePath: " + sourcePath);
-						System.out.println("fileName: " + fileName);
-						System.out.println("extention: " + extention);
 
 						FileUtils.deleteFiles(sourcePath, extention);
 
@@ -229,10 +202,6 @@ public class Annotate {
 						String fileName = ((RenameFile) annotation).filename();
 						String rename = ((RenameFile) annotation).rename();
 						String extention = ((RenameFile) annotation).regexpression();
-						System.out.println("sourcePath: " + sourcePath);
-						System.out.println("fileName: " + fileName);
-						System.out.println("rename: " + rename);
-						System.out.println("extention: " + extention);
 
 						FileUtils.renameFiles(sourcePath, rename, extention);
 
@@ -241,10 +210,6 @@ public class Annotate {
 						String fileName = ((PurgeData) annotation).filename();
 						int purgeDuration = ((PurgeData) annotation).purgeDuration();
 						String extention = ((PurgeData) annotation).regexpression();
-						System.out.println("archivePath: " + archivePath);
-						System.out.println("fileName: " + fileName);
-						System.out.println("purgeDuration: " + purgeDuration);
-						System.out.println("extention: " + extention);
 
 						FileUtils.purgeNdayOldFiles(archivePath, extention, purgeDuration);
 

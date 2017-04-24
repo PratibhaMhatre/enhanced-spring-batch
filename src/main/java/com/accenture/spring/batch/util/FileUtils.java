@@ -17,22 +17,16 @@ public class FileUtils {
 		try {
 			/*String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
 					.format(Calendar.getInstance().getTime());*/
-			System.out.println("Start");
 			File dir = new File(sourcePath.trim());
 			FileFilter fileFilter = new WildcardFileFilter(regex);
-			System.out.println("fileFilter: "+fileFilter);
 			File[] files = dir.listFiles(fileFilter);
-			System.out.println("Files: "+files);
 			for (File file : files) {
-				System.out.println("Moving file to :: " + destinationPath
-						+ file.getName());
 				Files.move(
 						Paths.get(sourcePath + file.getName()),
 						Paths.get(destinationPath + file.getName()),
 						StandardCopyOption.REPLACE_EXISTING);
 			}
 		} catch (IOException e) {
-			System.out.println("Error while moving files");
 		}
 
 	}
@@ -44,14 +38,12 @@ public class FileUtils {
 			FileFilter fileFilter = new WildcardFileFilter(regex);
 			File[] files = dir.listFiles(fileFilter);
 				for (File file : files) {
-					System.out.println("Copying file :: " + file.getName());
 					Files.copy(Paths.get(sourcePath + file.getName()),
 							Paths.get(destinationPath + file.getName()),
 							StandardCopyOption.REPLACE_EXISTING);
 				}
 			}
 		 catch (IOException e) {
-			System.out.println("Exception in  DDCUtils.copyFiles ");
 		}
 
 	}
@@ -65,7 +57,6 @@ public class FileUtils {
 		for (File file : files) {
 
 			if (file.delete()) {
-				System.out.println("Deleting file : " + file);
 			}
 		}
 
@@ -74,12 +65,10 @@ public class FileUtils {
 	public static void renameFiles(String outputDir, String name,String regex) {
 
 		File dir = new File(outputDir.trim());
-		System.out.println("dir: "+dir);
 		FileFilter fileFilter = new WildcardFileFilter(regex);
 		File[] files = dir.listFiles(fileFilter);
 		for (File file : files) {
 			
-			System.out.println("Renaming file : " + file);
 			file.renameTo(new File(outputDir + name));
 
 		}
@@ -98,7 +87,6 @@ public class FileUtils {
 
 				if (diff > purgeDuration * 24 * 60 * 60 * 1000) {
 					if (file.delete()) {
-						System.out.println("Purging file : " + file);
 					}
 				}
 			}

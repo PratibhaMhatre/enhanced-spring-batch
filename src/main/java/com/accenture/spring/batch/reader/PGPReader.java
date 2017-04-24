@@ -14,7 +14,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.io.InputStreamResource;
 
 import com.accenture.spring.batch.Exception.ExceptionCodes;
-import com.accenture.spring.batch.Exception.SpringBtachException;
+import com.accenture.spring.batch.Exception.SpringBatchException;
 import com.accenture.spring.batch.contant.Constants;
 import com.accenture.spring.batch.security.decryption.FileDecrypter;
 import com.accenture.spring.batch.security.encryption.FileEncrypter;
@@ -30,7 +30,7 @@ import com.accenture.spring.batch.util.SecurityUtil;
  */
 public class PGPReader extends FlatFileItemReader<Object> implements InitializingBean {
 
-	private boolean isCompressed = true;
+	private boolean isCompressed = true; /* if this flag is true that means file is commpressed*/
 	private String passphrase;
 	private String secretKeyFilePath;
 	private String publicKeyFilePath;
@@ -138,7 +138,6 @@ public class PGPReader extends FlatFileItemReader<Object> implements Initializin
 	public void afterPropertiesSet() throws Exception {
 		super.afterPropertiesSet();
 		FileDecrypter fileDecrypter = new FileDecrypter();
-
 		if (this.isCompressed) {
 			// TODO Check if isCompressed is true, then generate intermediate
 			// file & change/override the input resource
@@ -154,10 +153,8 @@ public class PGPReader extends FlatFileItemReader<Object> implements Initializin
 		InputStream clearStream = fileDecrypter.decryptFile(inputFilePath, secretKeyFilePath, passphrase.toCharArray(),
 				"sample.txt", false, 2);
 
-		System.out.println(clearStream);
 
 		InputStreamResource in = new InputStreamResource(clearStream);
-		System.out.println("input Stream"+in);
 
 		this.setResource(in);
 
@@ -176,8 +173,8 @@ public class PGPReader extends FlatFileItemReader<Object> implements Initializin
 
 		if (JavaUtil.isObjectNull(publicKeyFilePath)) {
 			try {
-				throw new SpringBtachException(ExceptionCodes.PUBLIC_KEY_NOTFOUND, "For DDC Public Key Path");
-			} catch (SpringBtachException e) {
+				throw new SpringBatchException(ExceptionCodes.PUBLIC_KEY_NOTFOUND, "For DDC Public Key Path");
+			} catch (SpringBatchException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}

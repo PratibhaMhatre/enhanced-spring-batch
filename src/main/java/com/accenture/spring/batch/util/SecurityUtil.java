@@ -37,7 +37,6 @@ public class SecurityUtil {
 
 	// Loads BouncyCastleProvider & Java Crypto Extentions only once
 	public static void loadSecuritySetting() {
-System.out.println("loading security settings::");
 		// make sure this method called only once
 		if (isSecuritySettingCalled)
 			return;

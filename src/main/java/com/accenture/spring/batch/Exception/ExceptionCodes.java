@@ -22,7 +22,7 @@ public enum ExceptionCodes {
 			"C012", "Files is not a simple encrypted file - type unknown."), SECRET_KEY_NOTFOUND(
 			"C013", "secret key for Files not found."), PUBLIC_KEY_NOTFOUND(
 			"C014", "Public key for Files not found."), FAILED_CRYPTO_LOADING(
-			"C015", "Error while Loading Cryptography settings"), FAILED_PROPRTY_LOADING(
+			"C015", "Error while Loading Cryptography settings"), OUTPUT_FILE_NOTFOUND(
 			"C016", "Exception occurred while decrypting file"), FAILED_PROTECTION(
 			"C017", "Input File is missing."),FAILED_DECRYPTION(
 					"DDC007", "Exception occurred while decrypting file");
