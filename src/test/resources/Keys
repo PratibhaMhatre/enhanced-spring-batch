@@ -1,0 +1,4 @@
+passphrase=12345
+secretKeyFilePath=0x4C61231C-sec.asc
+publicKeyFilePath=0x4C61231C-pub.asc
+publicKeyUserId=shruti.mukesh.sethia@accenture.com
