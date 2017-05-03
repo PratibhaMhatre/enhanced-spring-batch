@@ -15,7 +15,7 @@ import com.accenture.spring.batch.util.JavaUtil;
 import com.accenture.spring.batch.util.SecurityUtil;
 
 /**
- * FlatFileItemWriter implementation which writes encrypted PGP files
+ * ItemWriter implementation which writes encrypted PGP files
  * 
  * @author Shruti Sethia
  * @since 0.0.1
@@ -119,12 +119,6 @@ public class PGPWriter implements ItemWriter<Object>, ItemStream {
 			if (JavaUtil.isObjectNull(outputFilePath)) {
 				throw new SpringBatchException(ExceptionCodes.OUTPUT_FILE_NOTFOUND, "output path not found");
 			}
-
-			/*
-			 * strSampleOutputFileName = sampleOutputDir + filenameExtractCL;
-			 * FD_BATCH_LOGGER.info("Sample output file name: " +
-			 * strSampleOutputFileName);
-			 */
 
 			if (JavaUtil.isObjectNull(publicKeyFilePath)) {
 				throw new SpringBatchException(ExceptionCodes.PUBLIC_KEY_NOTFOUND, "For  Public Key Path");

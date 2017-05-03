@@ -15,8 +15,7 @@ public class FileUtils {
 	public static void moveFiles(String sourcePath, String destinationPath,
 			String regex) {
 		try {
-			/*String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
-					.format(Calendar.getInstance().getTime());*/
+			
 			File dir = new File(sourcePath.trim());
 			FileFilter fileFilter = new WildcardFileFilter(regex);
 			File[] files = dir.listFiles(fileFilter);

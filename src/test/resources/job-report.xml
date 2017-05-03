@@ -73,7 +73,7 @@
 		<property name="publicKeyFilePath"
 			value="C:\\Users\\shruti.mukesh.sethia\\Keys\\0x4C61231C-pub.asc" />
 		<property name="outputFilePath"
-			value="C:\\Users\\shruti.mukesh.sethia\\Test\\Dec_Output\\Dec_Output.csv" />
+			value="C:\\Users\\shruti.mukesh.sethia\\Test\\Enc_Output\\Enc_Output.csv" />
 		<property name="validUserID" value="shruti.mukesh.sethia@accenture.com" />
 
 		<property name="header" value="name,age,income,date"></property>

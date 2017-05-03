@@ -1,8 +1,7 @@
 package com.accenture.spring.batch.annotation;
 
 /**
- * Copies the file To the requested destination path 
- * 
+ *It copies the file from the path mentioned in parameter source to the path mentioned in parameter destination. 
  * 
  * @author Shruti Sethia
  * @param source,destination,filename,regexpression

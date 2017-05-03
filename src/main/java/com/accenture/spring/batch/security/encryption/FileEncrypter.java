@@ -80,7 +80,7 @@ public class FileEncrypter {
 
 
             if (!calledForFirstTime) {
-            	BATCH_LOGGER.info("Initialising the sample Encrypter for file "+fileName);
+            	BATCH_LOGGER.info("Initialising the Encrypter for file "+fileName);
                 fOutsample=new FileOutputStream(fileName);
                 fBufferedOut=new BufferedOutputStream(fOutsample);
                 PGPEncryptedDataGenerator cPk = new PGPEncryptedDataGenerator(
@@ -205,7 +205,7 @@ public class FileEncrypter {
 			}
 
         } catch (IOException e) {
-        	BATCH_LOGGER.warn("Error while closing sample Encryption Streams" ,e);
+        	BATCH_LOGGER.warn("Error while closing Encryption Streams" ,e);
         }
 
     }
