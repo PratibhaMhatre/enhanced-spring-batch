@@ -1,7 +1,3 @@
-/*
- * Created for DDC project.
- * Kohl's Corporation 2016
- */
 package com.accenture.spring.batch.security.encryption;
 
 import java.io.BufferedOutputStream;
@@ -27,7 +23,7 @@ import org.bouncycastle.openpgp.operator.jcajce.JcePublicKeyKeyEncryptionMethodG
 
 import com.accenture.spring.batch.Exception.ExceptionCodes;
 import com.accenture.spring.batch.Exception.SpringBatchException;
-import com.accenture.spring.batch.contant.Constants;
+import com.accenture.spring.batch.constants.Constants;
 import com.accenture.spring.batch.util.JavaUtil;
 
 /**

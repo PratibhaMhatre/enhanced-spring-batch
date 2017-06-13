@@ -1,7 +1,4 @@
-/*
- * Created for DDC project.
- * Kohl's Corporation 2016
- */
+
 package com.accenture.spring.batch.security.decryption;
 
 import java.io.BufferedInputStream;
@@ -34,13 +31,12 @@ import org.springframework.beans.factory.annotation.Value;
 
 import com.accenture.spring.batch.Exception.ExceptionCodes;
 import com.accenture.spring.batch.Exception.SpringBatchException;
-import com.accenture.spring.batch.contant.Constants;
+import com.accenture.spring.batch.constants.Constants;
 import com.accenture.spring.batch.util.SecurityUtil;
 
-
 /**
- * Class for returning underlying clear input stream to initialize FlatFileItemReader or
- * to uncompress encrypted input file
+ * Class for returning underlying clear input stream to initialize
+ * FlatFileItemReader or to uncompress encrypted input file
  *
  * @author Shruti Sethia
  * 
@@ -48,156 +44,131 @@ import com.accenture.spring.batch.util.SecurityUtil;
 public class FileDecrypter {
 
 	private static final Logger LOGGER = Logger.getLogger(FileDecrypter.class);
-  
-    @Value("${ddc.publickey.user}")
-	public static String validUserID;
-    @Value("${batchSize}")
-    public static int batchSize; 
-    
-    public InputStream decryptFile(String inputFileName, String keyFileName,
-                                                       char[] passwd, String defaultFileName, boolean decryptWithCompress, int job) throws SpringBatchException {
-        InputStream in = null;
-        InputStream keyIn = null;
-        BufferedReader br;
-        
-        
 
-        try {
-            if (StringUtils.isEmpty(inputFileName)) {
-                throw new SpringBatchException(ExceptionCodes.EMPTY_FIELD_VALUE, "Input File Name");
-            }
-            if (StringUtils.isEmpty(keyFileName)) {
-                throw new SpringBatchException(ExceptionCodes.EMPTY_FIELD_VALUE, "Key File Name");
-            }
-            if (StringUtils.isEmpty(defaultFileName)) {
-                throw new SpringBatchException(ExceptionCodes.EMPTY_FIELD_VALUE, "Output File Name");
-            }
+	public InputStream decryptFile(String inputFileName, String keyFileName, char[] passwd, String defaultFileName,
+			boolean decryptWithCompress, int job) throws SpringBatchException {
+		InputStream in = null;
+		InputStream keyIn = null;
+		BufferedReader br;
 
-            br = new BufferedReader(new FileReader(inputFileName));
-            if (br.readLine() == null) {
-                throw new SpringBatchException(ExceptionCodes.EMPTY_FIELD_VALUE, "Input File is Empty");
-            }
+		try {
+			if (StringUtils.isEmpty(inputFileName)) {
+				throw new SpringBatchException(ExceptionCodes.EMPTY_FIELD_VALUE, "Input File Name");
+			}
+			if (StringUtils.isEmpty(keyFileName)) {
+				throw new SpringBatchException(ExceptionCodes.EMPTY_FIELD_VALUE, "Key File Name");
+			}
+			if (StringUtils.isEmpty(defaultFileName)) {
+				throw new SpringBatchException(ExceptionCodes.EMPTY_FIELD_VALUE, "Output File Name");
+			}
 
+			br = new BufferedReader(new FileReader(inputFileName));
+			if (br.readLine() == null) {
+				throw new SpringBatchException(ExceptionCodes.EMPTY_FIELD_VALUE, "Input File is Empty");
+			}
 
-            in = new BufferedInputStream(new FileInputStream(
-                    inputFileName));
-            keyIn = new BufferedInputStream(new FileInputStream(
-                    new File(keyFileName)));
+			in = new BufferedInputStream(new FileInputStream(inputFileName));
+			keyIn = new BufferedInputStream(new FileInputStream(new File(keyFileName)));
 
-            return decryptFile(in, keyIn, defaultFileName, passwd, decryptWithCompress, job);
+			return decryptFile(in, keyIn, defaultFileName, passwd, decryptWithCompress, job);
 
-
-        } catch (FileNotFoundException fileNotFound) {
+		} catch (FileNotFoundException fileNotFound) {
 			throw new SpringBatchException(ExceptionCodes.FILE_NOT_FOUND, fileNotFound);
 		} catch (NoSuchProviderException missingBCProv) {
-			throw new SpringBatchException(ExceptionCodes.FAILED_BCPROVIDER_LOADING,
-					missingBCProv);
+			throw new SpringBatchException(ExceptionCodes.FAILED_BCPROVIDER_LOADING, missingBCProv);
 		} catch (IOException ioe) {
 			throw new SpringBatchException(ExceptionCodes.FAILED_STREAM_ONCLOSE, ioe);
 		} catch (Exception e) {
-			throw new SpringBatchException(ExceptionCodes.FAILED_ENCRYPTION_DECRYPTION,
-					e);
+			throw new SpringBatchException(ExceptionCodes.FAILED_ENCRYPTION_DECRYPTION, e);
 		}
 
-     
-    }
+	}
 
-    /**
-     * decrypt the passed in message stream
-     */
-    private InputStream decryptFile(InputStream in, InputStream keyIn, String defaultFileName,
-                                           char[] passwd, boolean decryptWithCompress, int job) throws IOException,
-            NoSuchProviderException, SpringBatchException {
-    	
+	/**
+	 * decrypt the passed in message stream
+	 */
+	private InputStream decryptFile(InputStream in, InputStream keyIn, String defaultFileName, char[] passwd,
+			boolean decryptWithCompress, int job) throws IOException, NoSuchProviderException, SpringBatchException {
 
-        in = PGPUtil.getDecoderStream(in);
-        JcaPGPObjectFactory pgpF;
-        PGPEncryptedDataList enc;
-        PGPPrivateKey sKey = null;
-        PGPPublicKeyEncryptedData pbe = null;
-        Object o;
-        InputStream clear;
-        JcaPGPObjectFactory plainFact;
-        PGPSecretKeyRingCollection pgpSec;
-        Object message;
-        PGPLiteralData ld = null;
-        try {
-            pgpF = new JcaPGPObjectFactory(in);
+		in = PGPUtil.getDecoderStream(in);
+		JcaPGPObjectFactory pgpF;
+		PGPEncryptedDataList enc;
+		PGPPrivateKey sKey = null;
+		PGPPublicKeyEncryptedData pbe = null;
+		Object o;
+		InputStream clear;
+		JcaPGPObjectFactory plainFact;
+		PGPSecretKeyRingCollection pgpSec;
+		Object message;
+		PGPLiteralData ld = null;
+		try {
+			pgpF = new JcaPGPObjectFactory(in);
 
-            o = pgpF.nextObject();
-            //
-            // the first object might be a PGP marker packet.
-            //
-            if (o instanceof PGPEncryptedDataList) {
-                enc = (PGPEncryptedDataList) o;
-            } else {
-                enc = (PGPEncryptedDataList) pgpF.nextObject();
-            }
-
-            //
-            // find the secret key
-            //
-            if (null == enc) {
-                throw new SpringBatchException(ExceptionCodes.UNKNOWN_FILETYPE_ERROR, "Please ensure if the contents of Input are encrypted");
-            }
-            Iterator<?> it = enc.getEncryptedDataObjects();
-            pgpSec = new PGPSecretKeyRingCollection(
-                    PGPUtil.getDecoderStream(keyIn),
-                    new JcaKeyFingerprintCalculator());
-
-            while (sKey == null && it.hasNext()) {
-                pbe = (PGPPublicKeyEncryptedData) it.next();
-
-                sKey = SecurityUtil.findSecretKey(pgpSec, pbe.getKeyID(),
-                        passwd);
-            }
-
-            if (sKey == null) {
-                throw new IllegalArgumentException(ExceptionCodes.SECRET_KEY_NOTFOUND.getMsg());
-            }
-
-            clear = pbe
-                    .getDataStream(new JcePublicKeyDataDecryptorFactoryBuilder()
-                            .setProvider(Constants.BOUNCY_CASTLE_PROVIDER).build(sKey));
-            
-
-            plainFact = new JcaPGPObjectFactory(clear);
-
-            message = plainFact.nextObject();
-
-            if (message instanceof PGPCompressedData) {
-
-                PGPCompressedData cData = (PGPCompressedData) message;
-
-                PGPObjectFactory pgpFact2 = new PGPObjectFactory(cData.getDataStream(), new JcaKeyFingerprintCalculator());
-
-                message = pgpFact2.nextObject();
-            }
-
-            if (message instanceof PGPLiteralData) {
-                ld = (PGPLiteralData) message;
-            }else if (message instanceof PGPOnePassSignatureList) {
-				throw new PGPException(
-						"encrypted message contains a signed message - not literal data.");
+			o = pgpF.nextObject();
+			//
+			// the first object might be a PGP marker packet.
+			//
+			if (o instanceof PGPEncryptedDataList) {
+				enc = (PGPEncryptedDataList) o;
 			} else {
-				throw new PGPException(
-						"message is not a simple encrypted file - type unknown.");
-			}	
+				enc = (PGPEncryptedDataList) pgpF.nextObject();
+			}
 
-          
-                	
-              
-                LOGGER.info("Returning InputStream to initilaize reader");
-                return ld.getInputStream();
-           
+			//
+			// find the secret key
+			//
+			if (null == enc) {
+				throw new SpringBatchException(ExceptionCodes.UNKNOWN_FILETYPE_ERROR,
+						"Please ensure if the contents of Input are encrypted");
+			}
+			Iterator<?> it = enc.getEncryptedDataObjects();
+			pgpSec = new PGPSecretKeyRingCollection(PGPUtil.getDecoderStream(keyIn), new JcaKeyFingerprintCalculator());
 
-        } catch (PGPException e) {
+			while (sKey == null && it.hasNext()) {
+				pbe = (PGPPublicKeyEncryptedData) it.next();
+
+				sKey = SecurityUtil.findSecretKey(pgpSec, pbe.getKeyID(), passwd);
+			}
+
+			if (sKey == null) {
+				throw new IllegalArgumentException(ExceptionCodes.SECRET_KEY_NOTFOUND.getMsg());
+			}
+
+			clear = pbe.getDataStream(new JcePublicKeyDataDecryptorFactoryBuilder()
+					.setProvider(Constants.BOUNCY_CASTLE_PROVIDER).build(sKey));
+
+			plainFact = new JcaPGPObjectFactory(clear);
+
+			message = plainFact.nextObject();
+
+			if (message instanceof PGPCompressedData) {
+
+				PGPCompressedData cData = (PGPCompressedData) message;
+
+				PGPObjectFactory pgpFact2 = new PGPObjectFactory(cData.getDataStream(),
+						new JcaKeyFingerprintCalculator());
+
+				message = pgpFact2.nextObject();
+			}
+
+			if (message instanceof PGPLiteralData) {
+				ld = (PGPLiteralData) message;
+			} else if (message instanceof PGPOnePassSignatureList) {
+				throw new PGPException("encrypted message contains a signed message - not literal data.");
+			} else {
+				throw new PGPException("message is not a simple encrypted file - type unknown.");
+			}
+
+			LOGGER.info("Returning InputStream to initilaize reader");
+			return ld.getInputStream();
+
+		} catch (PGPException e) {
 			if (e.getUnderlyingException() != null) {
 				LOGGER.error(e.getUnderlyingException());
 			}
 			throw new SpringBatchException(ExceptionCodes.FAILED_DECRYPTION, e);
 
 		}
-    }
+	}
 
 }

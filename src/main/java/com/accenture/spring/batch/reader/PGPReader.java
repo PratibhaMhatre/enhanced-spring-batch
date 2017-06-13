@@ -15,7 +15,7 @@ import org.springframework.core.io.InputStreamResource;
 
 import com.accenture.spring.batch.Exception.ExceptionCodes;
 import com.accenture.spring.batch.Exception.SpringBatchException;
-import com.accenture.spring.batch.contant.Constants;
+import com.accenture.spring.batch.constants.Constants;
 import com.accenture.spring.batch.security.decryption.FileDecrypter;
 import com.accenture.spring.batch.security.encryption.FileEncrypter;
 import com.accenture.spring.batch.util.JavaUtil;
