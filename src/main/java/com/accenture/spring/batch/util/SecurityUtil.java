@@ -23,7 +23,7 @@ import org.bouncycastle.openpgp.operator.jcajce.JcaKeyFingerprintCalculator;
 import org.bouncycastle.openpgp.operator.jcajce.JcePBESecretKeyDecryptorBuilder;
 
 import com.accenture.spring.batch.Exception.ExceptionCodes;
-import com.accenture.spring.batch.contant.Constants;
+import com.accenture.spring.batch.constants.Constants;
 
 /**
  * This class contains utility operations related to bouncy castle cryptography

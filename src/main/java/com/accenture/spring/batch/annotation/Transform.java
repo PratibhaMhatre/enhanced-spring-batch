@@ -16,8 +16,6 @@ import java.lang.annotation.Target;
  * Class level Annotation. 
  * Determines Class has used Custom Annotated fields
  * 
- * @author aparna.satpathy,shruti.mukesh.sethia
- * 
  */
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)

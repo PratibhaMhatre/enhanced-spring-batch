@@ -1,4 +1,4 @@
-package com.accenture.spring.batch.contant;
+package com.accenture.spring.batch.constants;
 /**
  * @author Shruti Sethia
  * 

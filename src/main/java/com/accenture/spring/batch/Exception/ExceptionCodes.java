@@ -8,7 +8,8 @@ public enum ExceptionCodes {
 		EMPTY_FIELD_VALUE("C001", "String field is missing."), 
 		INVALID_FIELD_VALUE("C002", "Field value is invalid."), 
 		INVALID_NUMBER_FORMAT(
-			"C003", "Number format is invalid."), FALED_INTEGRITY_CHK(
+			"C003", "Number format is invalid."),
+		FALED_INTEGRITY_CHK(
 			"C004", "Files failed integrity check"), NO_INTEGRITY_CHK(
 			"C005", "no Files integrity check"), FAILED_STREAM_CREATION(
 			"C006", "Exception occurred while creating Input/Output Stream "), FAILED_BCPROVIDER_LOADING(
@@ -24,8 +25,9 @@ public enum ExceptionCodes {
 			"C014", "Public key for Files not found."), FAILED_CRYPTO_LOADING(
 			"C015", "Error while Loading Cryptography settings"), OUTPUT_FILE_NOTFOUND(
 			"C016", "Exception occurred while decrypting file"), FAILED_PROTECTION(
-			"C017", "Input File is missing."),FAILED_DECRYPTION(
-					"DDC007", "Exception occurred while decrypting file");
+			"C017", "Input File is missing."),
+		FAILED_DECRYPTION(
+					"C018", "Exception occurred while decrypting file");
 
 	private final String id;
 	private final String msg;

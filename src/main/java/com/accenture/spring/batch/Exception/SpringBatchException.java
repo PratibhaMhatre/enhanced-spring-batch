@@ -1,15 +1,6 @@
-/*
- * Created for DDC project.
- * Kohl's Corporation 2016
- */
+
 package com.accenture.spring.batch.Exception;
 
-/**
- * This is a custom Exception class for DDC Project
- * 
- * @author tkmaawv
- * @since Nov 28 2016
- */
 public class SpringBatchException extends Exception {
 
 	private static final long serialVersionUID = 1L;

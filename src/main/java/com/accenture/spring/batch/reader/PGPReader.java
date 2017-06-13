@@ -15,7 +15,7 @@ import org.springframework.core.io.InputStreamResource;
 
 import com.accenture.spring.batch.Exception.ExceptionCodes;
 import com.accenture.spring.batch.Exception.SpringBatchException;
-import com.accenture.spring.batch.contant.Constants;
+import com.accenture.spring.batch.constants.Constants;
 import com.accenture.spring.batch.security.decryption.FileDecrypter;
 import com.accenture.spring.batch.security.encryption.FileEncrypter;
 import com.accenture.spring.batch.util.JavaUtil;
@@ -173,7 +173,7 @@ public class PGPReader extends FlatFileItemReader<Object> implements Initializin
 
 		if (JavaUtil.isObjectNull(publicKeyFilePath)) {
 			try {
-				throw new SpringBatchException(ExceptionCodes.PUBLIC_KEY_NOTFOUND, "For DDC Public Key Path");
+				throw new SpringBatchException(ExceptionCodes.PUBLIC_KEY_NOTFOUND, "For Public Key Path");
 			} catch (SpringBatchException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
