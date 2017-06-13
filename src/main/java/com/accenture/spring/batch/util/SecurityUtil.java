@@ -110,6 +110,7 @@ public class SecurityUtil {
 		PGPPublicKey encKey = null;
 		while (itr.hasNext()) {
 			encKey = itr.next().getPublicKey();
+			@SuppressWarnings("unchecked")
 			Iterator<String> ids = encKey.getUserIDs();
 			if (ids.hasNext()) {
 				String userID = ids.next();

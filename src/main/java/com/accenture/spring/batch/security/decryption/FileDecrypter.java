@@ -108,6 +108,7 @@ public class FileDecrypter {
 			//
 			// find the secret key
 			//
+			@SuppressWarnings("unchecked")
 			Iterator<PGPPublicKeyEncryptedData> it = enc.getEncryptedDataObjects();
 			PGPPrivateKey sKey = null;
 			PGPPublicKeyEncryptedData pbe = null;

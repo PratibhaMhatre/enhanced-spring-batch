@@ -173,11 +173,11 @@ public class Annotate {
 				Annotation[] annotations = field.getDeclaredAnnotations();
 
 				for (Annotation annotation : annotations) {
-					String name = field.getName();
+					//String name = field.getName();
 					if (annotation instanceof MoveFile) {
 						String sourcePath = ((MoveFile) annotation).source();
 						String destinationPath = ((MoveFile) annotation).destination();
-						String fileName = ((MoveFile) annotation).filename();
+					//	String fileName = ((MoveFile) annotation).filename();
 						String extention = ((MoveFile) annotation).regexpression();
 
 						FileUtils.moveFiles(sourcePath, destinationPath, extention);
@@ -185,21 +185,21 @@ public class Annotate {
 					} else if (annotation instanceof CopyFile) {
 						String sourcePath = ((CopyFile) annotation).source();
 						String destinationPath = ((CopyFile) annotation).destination();
-						String fileName = ((CopyFile) annotation).filename();
+						//String fileName = ((CopyFile) annotation).filename();
 						String extention = ((CopyFile) annotation).regexpression();
 
 						FileUtils.copyFiles(sourcePath, destinationPath, extention);
 
 					} else if (annotation instanceof DeleteFile) {
 						String sourcePath = ((DeleteFile) annotation).source();
-						String fileName = ((DeleteFile) annotation).filename();
+					//	String fileName = ((DeleteFile) annotation).filename();
 						String extention = ((DeleteFile) annotation).regexpression();
 
 						FileUtils.deleteFiles(sourcePath, extention);
 
 					} else if (annotation instanceof RenameFile) {
 						String sourcePath = ((RenameFile) annotation).source();
-						String fileName = ((RenameFile) annotation).filename();
+					//	String fileName = ((RenameFile) annotation).filename();
 						String rename = ((RenameFile) annotation).rename();
 						String extention = ((RenameFile) annotation).regexpression();
 
@@ -207,7 +207,7 @@ public class Annotate {
 
 					} else if (annotation instanceof PurgeData) {
 						String archivePath = ((PurgeData) annotation).archiveDir();
-						String fileName = ((PurgeData) annotation).filename();
+					//	String fileName = ((PurgeData) annotation).filename();
 						int purgeDuration = ((PurgeData) annotation).purgeDuration();
 						String extention = ((PurgeData) annotation).regexpression();
 
