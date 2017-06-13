@@ -10,8 +10,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.NoSuchProviderException;
+import java.util.HashMap;
 import java.util.Iterator;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.bouncycastle.openpgp.PGPCompressedData;
@@ -27,7 +29,6 @@ import org.bouncycastle.openpgp.PGPUtil;
 import org.bouncycastle.openpgp.jcajce.JcaPGPObjectFactory;
 import org.bouncycastle.openpgp.operator.jcajce.JcaKeyFingerprintCalculator;
 import org.bouncycastle.openpgp.operator.jcajce.JcePublicKeyDataDecryptorFactoryBuilder;
-import org.springframework.beans.factory.annotation.Value;
 
 import com.accenture.spring.batch.Exception.ExceptionCodes;
 import com.accenture.spring.batch.Exception.SpringBatchException;
@@ -44,6 +45,133 @@ import com.accenture.spring.batch.util.SecurityUtil;
 public class FileDecrypter {
 
 	private static final Logger LOGGER = Logger.getLogger(FileDecrypter.class);
+
+	private String gpgFilePath;
+	private String keyFileName;
+	private String passwd;
+
+	public String getGpgFilePath() {
+		return gpgFilePath;
+	}
+
+	public void setGpgFilePath(String gpgFilePath) {
+		this.gpgFilePath = gpgFilePath;
+	}
+
+	public String getKeyFileName() {
+		return keyFileName;
+	}
+
+	public void setKeyFileName(String keyFileName) {
+		this.keyFileName = keyFileName;
+	}
+
+	public String getPasswd() {
+		return passwd;
+	}
+
+	public void setPasswd(String passwd) {
+		this.passwd = passwd;
+	}
+
+	public HashMap<String, String> decryptFile() throws IOException, NoSuchProviderException {
+		InputStream in = new BufferedInputStream(new FileInputStream(gpgFilePath));
+		InputStream keyIn = new BufferedInputStream(new FileInputStream(keyFileName));
+		HashMap<String, String> db = decrypt(in, keyIn, passwd.toCharArray());
+		keyIn.close();
+		in.close();
+		return db;
+	}
+
+	/**
+	 * decrypt the passed in message stream
+	 */
+	private HashMap<String, String> decrypt(InputStream in, InputStream keyIn, char[] passwd)
+			throws IOException, NoSuchProviderException {
+		HashMap<String, String> db = new HashMap<String, String>();
+		in = PGPUtil.getDecoderStream(in);
+
+		try {
+			JcaPGPObjectFactory pgpF = new JcaPGPObjectFactory(in);
+			PGPEncryptedDataList enc;
+
+			Object o = pgpF.nextObject();
+			//
+			// the first object might be a PGP marker packet.
+			//
+			if (o instanceof PGPEncryptedDataList) {
+				enc = (PGPEncryptedDataList) o;
+			} else {
+				enc = (PGPEncryptedDataList) pgpF.nextObject();
+			}
+
+			//
+			// find the secret key
+			//
+			Iterator<PGPPublicKeyEncryptedData> it = enc.getEncryptedDataObjects();
+			PGPPrivateKey sKey = null;
+			PGPPublicKeyEncryptedData pbe = null;
+			PGPSecretKeyRingCollection pgpSec = new PGPSecretKeyRingCollection(PGPUtil.getDecoderStream(keyIn),
+					new JcaKeyFingerprintCalculator());
+
+			while (sKey == null && it.hasNext()) {
+				pbe = (PGPPublicKeyEncryptedData) it.next();
+
+				sKey = SecurityUtil.findSecretKey(pgpSec, pbe.getKeyID(), passwd);
+			}
+
+			if (sKey == null) {
+				throw new IllegalArgumentException("secret key for message not found.");
+			}
+
+			InputStream clear = pbe
+					.getDataStream(new JcePublicKeyDataDecryptorFactoryBuilder().setProvider("BC").build(sKey));
+
+			JcaPGPObjectFactory plainFact = new JcaPGPObjectFactory(clear);
+
+			Object message = plainFact.nextObject();
+
+			if (message instanceof PGPCompressedData) {
+				PGPCompressedData cData = (PGPCompressedData) message;
+				JcaPGPObjectFactory pgpFact = new JcaPGPObjectFactory(cData.getDataStream());
+
+				message = pgpFact.nextObject();
+			}
+
+			if (message instanceof PGPLiteralData) {
+				PGPLiteralData ld = (PGPLiteralData) message;
+
+				InputStream unc = ld.getInputStream();
+				String s = IOUtils.toString(unc, "UTF-8");
+
+				String[] val = s.split("/");
+				db.put("username", val[0]);
+				db.put("password", val[1]);
+				IOUtils.closeQuietly(unc);
+
+			} else if (message instanceof PGPOnePassSignatureList) {
+				throw new PGPException("encrypted message contains a signed message - not literal data.");
+			} else {
+				throw new PGPException("message is not a simple encrypted file - type unknown.");
+			}
+
+			if (pbe.isIntegrityProtected()) {
+				if (!pbe.verify()) {
+					LOGGER.info("message failed integrity check");
+				} else {
+					LOGGER.info("message integrity check passed");
+				}
+			} else {
+				LOGGER.info("no message integrity check");
+			}
+		} catch (PGPException e) {
+			LOGGER.error(e);
+			if (e.getUnderlyingException() != null) {
+				e.getUnderlyingException().printStackTrace();
+			}
+		}
+		return db;
+	}
 
 	public InputStream decryptFile(String inputFileName, String keyFileName, char[] passwd, String defaultFileName,
 			boolean decryptWithCompress, int job) throws SpringBatchException {
@@ -64,9 +192,10 @@ public class FileDecrypter {
 
 			br = new BufferedReader(new FileReader(inputFileName));
 			if (br.readLine() == null) {
+				br.close();
 				throw new SpringBatchException(ExceptionCodes.EMPTY_FIELD_VALUE, "Input File is Empty");
 			}
-
+			br.close();
 			in = new BufferedInputStream(new FileInputStream(inputFileName));
 			keyIn = new BufferedInputStream(new FileInputStream(new File(keyFileName)));
 
