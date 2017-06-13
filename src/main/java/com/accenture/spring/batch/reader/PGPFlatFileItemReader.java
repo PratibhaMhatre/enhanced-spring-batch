@@ -28,7 +28,7 @@ import com.accenture.spring.batch.util.SecurityUtil;
  * @author Shruti Sethia
  * @since 0.0.1
  */
-public class PGPReader extends FlatFileItemReader<Object> implements InitializingBean {
+public class PGPFlatFileItemReader extends FlatFileItemReader<Object> implements InitializingBean {
 
 	private boolean isCompressed = true; /* if this flag is true that means file is commpressed*/
 	private String passphrase;
@@ -40,7 +40,7 @@ public class PGPReader extends FlatFileItemReader<Object> implements Initializin
 	// private Resource resource;
 	
 
-	public PGPReader() {
+	public PGPFlatFileItemReader() {
 		SecurityUtil.loadSecuritySetting();
 	}
 
@@ -160,7 +160,7 @@ public class PGPReader extends FlatFileItemReader<Object> implements Initializin
 
 	}
 
-	public void uncompressFile(InputStream unc) throws IOException, NoSuchProviderException, PGPException {
+	private void uncompressFile(InputStream unc) throws IOException, NoSuchProviderException, PGPException {
 
 		BufferedReader bufferRead = new BufferedReader(new InputStreamReader(unc));
 
