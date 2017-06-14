@@ -33,17 +33,17 @@
 
 
 
-	<bean id="cvsFileItemReader" class="com.accenture.spring.batch.reader.PGPReader"
+	<bean id="cvsFileItemReader" class="com.accenture.spring.batch.reader.PGPFlatFileItemReader"
 		scope="step">
 		<property name="resource" value="classpath:Report.csv" />
 		<property name="passphrase" value="12345" />
 		<property name="secretKeyFilePath"
-			value="C:\\Users\\shruti.mukesh.sethia\\Keys\\0x4C61231C-sec.asc" />
+			value="\\0x4C61231C-sec.asc" />
 		<property name="publicKeyFilePath"
-			value="C:\\Users\\shruti.mukesh.sethia\\Keys\\0x4C61231C-pub.asc" />
+			value="\\0x4C61231C-pub.asc" />
 		<property name="publicKeyUserId" value="shruti.mukesh.sethia@accenture.com" />
 		<property name="inputFilePath"
-			value="C:\\Users\\shruti.mukesh.sethia\\git\\enhanced-spring-batch\\src\\test\\resources\\Report.csv" />
+			value="\\Report.csv" />
 
 		<property name="lineMapper">
 			<bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
@@ -71,9 +71,9 @@
 
 
 		<property name="publicKeyFilePath"
-			value="C:\\Users\\shruti.mukesh.sethia\\Keys\\0x4C61231C-pub.asc" />
+			value="\\0x4C61231C-pub.asc" />
 		<property name="outputFilePath"
-			value="C:\\Users\\shruti.mukesh.sethia\\Test\\Enc_Output\\Enc_Output.csv" />
+			value="\\Enc_Output.csv" />
 		<property name="validUserID" value="shruti.mukesh.sethia@accenture.com" />
 
 		<property name="header" value="name,age,income,date"></property>

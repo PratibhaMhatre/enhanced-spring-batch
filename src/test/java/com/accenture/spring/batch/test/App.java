@@ -15,12 +15,15 @@ public class App {
 
 		ApplicationContext context = new ClassPathXmlApplicationContext("context.xml");
 
-		Job job = (Job) context.getBean("reportJob"); 
+		// Job job = (Job) context.getBean("reportJob");
+		Job job = (Job) context.getBean("reportJob1");
 		
 		try {
 
 			JobLauncher jobLauncher = (JobLauncher) context.getBean("jobLauncher");
 			JobExecution execution = jobLauncher.run(job, new JobParameters());
+			
+			System.out.println(execution.getAllFailureExceptions());
 
 		} catch (JobExecutionException e1) {
 			e1.printStackTrace();
