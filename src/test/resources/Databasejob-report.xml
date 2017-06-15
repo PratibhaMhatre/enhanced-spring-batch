@@ -40,6 +40,7 @@
 		<property name="rowMapper">
 			<bean class="com.accenture.spring.batch.test.ReportMapper" />
 		</property>
+		
 
 	</bean>
 

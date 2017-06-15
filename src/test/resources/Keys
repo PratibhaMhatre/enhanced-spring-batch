@@ -1,4 +1,4 @@
 passphrase=12345
-secretKeyFilePath=0x4C61231C-sec.asc
-publicKeyFilePath=0x4C61231C-pub.asc
+secretKeyFilePath=0x4C61231C-sec.asc //public.asc
+publicKeyFilePath=0x4C61231C-pub.asc //Secret.asc
 publicKeyUserId=shruti.mukesh.sethia@accenture.com

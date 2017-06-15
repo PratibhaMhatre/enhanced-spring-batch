@@ -156,15 +156,14 @@ public class FileDecrypter {
 					throw new SpringBatchException(ExceptionCodes.INVALID_FIELD_VALUE,"Property file does not contain username");
 				}
 				if(val[1] !=null && val[1].startsWith("password=")){
-					String password = val[0].substring(9, val[0].length()-1);
-					db.put("username", password);
+					String password = val[1].substring(9, val[1].length()-1);
+					db.put("password", password);
 				}
 				else{
 					LOGGER.error("Property file does not contain password");
 					throw new SpringBatchException(ExceptionCodes.INVALID_FIELD_VALUE,"Property file does not contain password");
 				}
-				db.put("username", val[0]);
-				db.put("password", val[1]);
+			
 				IOUtils.closeQuietly(unc);
 
 			} else if (message instanceof PGPOnePassSignatureList) {
