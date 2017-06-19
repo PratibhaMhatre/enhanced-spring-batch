@@ -16,7 +16,7 @@ import java.lang.annotation.Target;
  * Timestamp and stores it in a variable which is passed in the parameter value.
  * 
  * 
- * @author aparna.satpathy,shruti.mukesh.sethia
+ * @author aparna.satpathy
  * @param value
  */
 @Target({ ElementType.FIELD })

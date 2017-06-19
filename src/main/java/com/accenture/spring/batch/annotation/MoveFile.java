@@ -1,6 +1,6 @@
 package com.accenture.spring.batch.annotation;
 /**
- * It moves the file from the path mentioned in parameter source to the path mentioned in parameter destination. 
+ * It moves the file from source to destination. 
  * 
  * @author Shruti Sethia
  * @param source,destination,filename,regexpression

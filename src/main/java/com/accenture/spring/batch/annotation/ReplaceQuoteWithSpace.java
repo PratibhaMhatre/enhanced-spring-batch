@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 /**
  * Replaces Quotes With Space
  * 
- * @author aparna.satpathy,shruti.mukesh.sethia
+ * @author aparna.satpathy
  * 
  */
 @Target({ ElementType.FIELD })

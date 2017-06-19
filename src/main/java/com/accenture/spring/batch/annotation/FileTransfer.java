@@ -1,5 +1,8 @@
+
 package com.accenture.spring.batch.annotation;
 /**
+ * It allows you to use annotations(PurgeData,CopyFile,DeleteFile,MoveFile,RenameFile)
+ * 
  * @author Shruti Sethia
  * 
  */

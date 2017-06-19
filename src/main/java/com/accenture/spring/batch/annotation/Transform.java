@@ -4,6 +4,7 @@
  */
 package com.accenture.spring.batch.annotation;
 /**
+ * It allows you to use annotations(ReplaceQuoteWithSpace,StringToDate,StringToTimestamp,Trim,UtilDateToSqlDate,UtilDateToSqlTimestamp)
  * @author Shruti Sethia
  * 
  */
@@ -15,7 +16,7 @@ import java.lang.annotation.Target;
 /**
  * Class level Annotation. 
  * Determines Class has used Custom Annotated fields
- * 
+ *  
  */
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
