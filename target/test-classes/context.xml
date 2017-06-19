@@ -21,21 +21,21 @@
 		<property name="jobRepository" ref="jobRepository" />
 	</bean>
 
-	<bean id="dataSources" class="com.accenture.spring.batch.datasource.EncryptedDataSource"
+	<bean id="dataSource"
+		class="com.accenture.spring.batch.datasource.EncryptedDataSource"
 		init-method="initIt">
 		<property name="driverClassName" value="org.postgresql.Driver" />
 		<property name="url" value="jdbc:postgresql://localhost:5432/Report" />
 		<property name="fileDecrypt">
-			<bean id="fileDecrypt" class="com.accenture.spring.batch.security.decryption.FileDecrypter">
-				<property name="gpgFilePath" value="C:\\Users\\pratibha.ghorpade\\git\\enhanced-spring-batch\\src\\test\\resources\\enc_test.properties" />
-				<property name="keyFileName" value="C:\\Users\\pratibha.ghorpade\\git\\enhanced-spring-batch\\src\\test\\resources\\Secret.asc" />
+			<bean id="fileDecrypt"
+				class="com.accenture.spring.batch.security.decryption.FileDecrypter">
+				<property name="gpgFilePath"
+					value="C:\\Users\\pratibha.ghorpade\\git\\enhanced-spring-batch\\src\\test\\resources\\enc_test.properties" />
+				<property name="keyFileName"
+					value="C:\\Users\\pratibha.ghorpade\\git\\enhanced-spring-batch\\src\\test\\resources\\Secret.asc" />
 				<property name="passwd" value="12345" />
 			</bean>
 		</property>
 	</bean>
-
-
-
-
 
 </beans>

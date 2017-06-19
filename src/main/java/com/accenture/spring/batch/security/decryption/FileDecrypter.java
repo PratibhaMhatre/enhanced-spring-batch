@@ -85,10 +85,10 @@ public class FileDecrypter {
 
 	/**
 	 * decrypt the passed in message stream
-	 * @throws Exception 
+	 * 
+	 * @throws Exception
 	 */
-	private HashMap<String, String> decrypt(InputStream in, InputStream keyIn, char[] passwd)
-			throws Exception {
+	private HashMap<String, String> decrypt(InputStream in, InputStream keyIn, char[] passwd) throws Exception {
 		HashMap<String, String> db = new HashMap<String, String>();
 		in = PGPUtil.getDecoderStream(in);
 
@@ -147,23 +147,24 @@ public class FileDecrypter {
 				String s = IOUtils.toString(unc, "UTF-8");
 
 				String[] val = s.split("\n");
-				
-				if(val[0] !=null && val[0].startsWith("username=")){
-					String username = val[0].substring(9, val[0].length()-1);
+
+				if (val[0] != null && val[0].startsWith("username=")) {
+					String username = val[0].substring(9, val[0].length() - 1);
 					db.put("username", username);
-				}else{
+				} else {
 					LOGGER.error("Property file does not contain username");
-					throw new SpringBatchException(ExceptionCodes.INVALID_FIELD_VALUE,"Property file does not contain username");
+					throw new SpringBatchException(ExceptionCodes.INVALID_FIELD_VALUE,
+							"Property file does not contain username");
 				}
-				if(val[1] !=null && val[1].startsWith("password=")){
-					String password = val[1].substring(9, val[1].length()-1);
+				if (val[1] != null && val[1].startsWith("password=")) {
+					String password = val[1].substring(9, val[1].length());
 					db.put("password", password);
-				}
-				else{
+				} else {
 					LOGGER.error("Property file does not contain password");
-					throw new SpringBatchException(ExceptionCodes.INVALID_FIELD_VALUE,"Property file does not contain password");
+					throw new SpringBatchException(ExceptionCodes.INVALID_FIELD_VALUE,
+							"Property file does not contain password");
 				}
-			
+
 				IOUtils.closeQuietly(unc);
 
 			} else if (message instanceof PGPOnePassSignatureList) {

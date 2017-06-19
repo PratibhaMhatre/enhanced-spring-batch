@@ -209,7 +209,7 @@ public class EncDec {
 		String publicKeyName = "C:\\Users\\pratibha.ghorpade\\git\\enhanced-spring-batch\\src\\test\\resources\\public.asc";
 		String keyFileName = "C:\\Users\\pratibha.ghorpade\\git\\enhanced-spring-batch\\src\\test\\resources\\Secret.asc";
 		char[] ch = "12345".toCharArray();
-		 decryptFile(outFile, keyFileName, ch, "dec1.out");
+		// decryptFile(outFile, keyFileName, ch, "dec2.out");
 		//encryptFile(outFile, inputFile, publicKeyName, false, true);
 		// }
 		// else

@@ -9,7 +9,6 @@ public class ReportMapper implements RowMapper<Report> {
 
 	@Override
     public Report mapRow(ResultSet rs, int rowNum) throws SQLException {
- System.out.println("inside mapper");
     	Report report = new Report();
     	report.setRefId(rs.getInt("refid"));
     	report.setName(rs.getString("name"));
