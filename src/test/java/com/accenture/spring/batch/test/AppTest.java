@@ -12,7 +12,7 @@ import com.accenture.spring.batch.transform.Annotate;
 /**
  * Creates the object of POJO class and calls the Annotate class
  * 
- * @author aparna.satpathy,shruti.mukesh.sethia
+ * @author aparna.satpathy
  * 
  */
 public class AppTest {
@@ -21,7 +21,7 @@ public class AppTest {
 	 * @Autowired Annotate annotate;
 	 */
 
-	public static void main(String[] ar) {
+/*	public static void main(String[] ar) {
 
 		Employee employee = new Employee();
 		employee.setName("Shri\"tu");
@@ -31,11 +31,11 @@ public class AppTest {
 		employee.setUtilDate(new Date());
 		employee.setUtilTimestampDate(new Date());
 
-		/*
+		
 		 * ApplicationContext context = new
 		 * ClassPathXmlApplicationContext("applicationContext.xml"); Annotate
 		 * annotate = (Annotate) context.getBean("annotate");
-		 */
+		 
 		Annotate annotate = new Annotate();
 		try {
 			employee = (Employee) annotate.transform(employee);
@@ -52,5 +52,5 @@ public class AppTest {
 			e.printStackTrace();
 		}
 
-	}
+	}*/
 }

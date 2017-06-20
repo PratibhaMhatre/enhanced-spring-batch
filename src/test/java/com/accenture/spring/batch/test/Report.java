@@ -1,12 +1,25 @@
 package com.accenture.spring.batch.test;
 
+import org.springframework.stereotype.Component;
+
+import com.accenture.spring.batch.annotation.ReplaceQuoteWithSpace;
+import com.accenture.spring.batch.annotation.Transform;
+import com.accenture.spring.batch.annotation.Trim;
+
+@Component
+@Transform
 public class Report {
 
-	private int refId;
-	private String name;
-	private int age;
+	
+	private int refId=1;
+	
+	@ReplaceQuoteWithSpace
+	private String name="Shri\"ti";
+	
+	private int age=20;
 	/* private String dob; */
-	private String income;
+	@Trim
+	private String income="    hdghsgds ksjf    ";
 
 	public int getRefId() {
 		return refId;

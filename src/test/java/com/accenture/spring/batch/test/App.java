@@ -15,8 +15,8 @@ public class App {
 
 		ApplicationContext context = new ClassPathXmlApplicationContext("context.xml");
 
-		// Job job = (Job) context.getBean("reportJob");
-		Job job = (Job) context.getBean("reportJob1");
+		 Job job = (Job) context.getBean("reportJob");
+		//Job job = (Job) context.getBean("reportJob1");
 		
 		try {
 

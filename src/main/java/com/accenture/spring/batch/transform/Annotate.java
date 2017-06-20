@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hamcrest.core.IsInstanceOf;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
@@ -48,12 +49,16 @@ public class Annotate {
 
 	public Object transform(Object obj) throws IllegalAccessException, IllegalArgumentException,
 			InvocationTargetException, NoSuchMethodException, SecurityException {
-
+System.out.println("Object :: "+obj);
 		context = new ClassPathXmlApplicationContext("applicationContext.xml");
 
 		final Map<String, Object> annotatedClasses = context.getBeansWithAnnotation(Transform.class);
 
 		for (final Object annotatedClass : annotatedClasses.values()) {
+			System.out.println("class:: "+annotatedClass);
+
+	
+
 
 			Method[] methods = annotatedClass.getClass().getDeclaredMethods();
 
@@ -62,6 +67,7 @@ public class Annotate {
 			Field[] fields = annotatedClass.getClass().getDeclaredFields();
 
 			for (Method method : methods) {
+				System.out.println("method is:: "+method);
 				for (Field field : fields) {
 
 					String methodName = method.getName();
@@ -154,7 +160,7 @@ public class Annotate {
 
 		}
 		return obj;
-
+	
 	}
 
 	public Object fileTransfer(Object obj) throws IllegalAccessException, IllegalArgumentException,
