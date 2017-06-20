@@ -18,7 +18,7 @@
 
 	<context:component-scan base-package="com.accenture" />
 
-	<!-- <bean id="report" class="com.accenture.spring.batch.test.Report" /> -->
+
 	<batch:job id="reportJob1" restartable="false">
 		<batch:step id="step1">
 			<batch:tasklet>
@@ -33,14 +33,14 @@
 	<bean id="databaseItemReader"
 		class="org.springframework.batch.item.database.JdbcCursorItemReader">
 
-		<property name="dataSource" ref="dataSources" />
+		<property name="dataSource" ref="dataSource" />
 
 		<property name="sql" value="SELECT refId,name,age,income FROM Report" />
 
 		<property name="rowMapper">
 			<bean class="com.accenture.spring.batch.test.ReportMapper" />
 		</property>
-		
+
 
 	</bean>
 

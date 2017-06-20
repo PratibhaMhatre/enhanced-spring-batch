@@ -46,14 +46,12 @@ public class EncryptedDataSource extends DriverManagerDataSource {
 	@Override
 	public String getPassword() {
 		String password = credential.get("password");
-		System.out.println("password : "+password);
 		return password;
 	}
 
 	@Override
 	public String getUsername() {
 		String username = credential.get("username");
-		System.out.println("username : "+username);
 		return username;
 	}
 

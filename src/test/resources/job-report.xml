@@ -22,7 +22,7 @@
 	<batch:job id="reportJob" restartable="false">
 		<batch:step id="step1">
 			<batch:tasklet>
-				<batch:chunk reader="cvsFileItemReader" writer="cvsFileItemWriter"
+				<batch:chunk reader="cvsFileItemReader" processor="csvProcessor" writer="cvsFileItemWriter"
 					commit-interval="1">
 				</batch:chunk>
 			</batch:tasklet>
@@ -35,15 +35,15 @@
 
 	<bean id="cvsFileItemReader" class="com.accenture.spring.batch.reader.PGPFlatFileItemReader"
 		scope="step">
-		<property name="resource" value="classpath:Report.csv" />
+		<!-- <property name="resource" value="classpath:Report.csv" /> -->
 		<property name="passphrase" value="12345" />
 		<property name="secretKeyFilePath"
-			value="\\0x4C61231C-sec.asc" />
+			value="C:/Users/pratibha.ghorpade/git/enhanced-spring-batch/src/test/resources/Secret.asc" />
 		<property name="publicKeyFilePath"
-			value="\\0x4C61231C-pub.asc" />
+			value="C:/Users/pratibha.ghorpade/git/enhanced-spring-batch/src/test/resources/public.asc" />
 		<property name="publicKeyUserId" value="shruti.mukesh.sethia@accenture.com" />
 		<property name="inputFilePath"
-			value="\\Report.csv" />
+			value="C:/Users/pratibha.ghorpade/git/enhanced-spring-batch/src/test/resources/Report.csv" />
 
 		<property name="lineMapper">
 			<bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
@@ -64,16 +64,18 @@
 			</bean>
 		</property>
 	</bean>
+<bean id="csvProcessor" class="com.accenture.spring.batch.processor.CSVFileProcessor"/>
 
+<bean id="annotate" class="com.accenture.spring.batch.transform.Annotate"/>
 
 	<bean id="cvsFileItemWriter" class="com.accenture.spring.batch.writer.PGPWriter"
 		scope="step">
 
 
 		<property name="publicKeyFilePath"
-			value="\\0x4C61231C-pub.asc" />
+			value="C:/Users/pratibha.ghorpade/git/enhanced-spring-batch/src/test/resources/public.asc" />
 		<property name="outputFilePath"
-			value="\\Enc_Output.csv" />
+			value="C:/Users/pratibha.ghorpade/git/enhanced-spring-batch/src/test/resources/Enc_Output.csv" />
 		<property name="validUserID" value="shruti.mukesh.sethia@accenture.com" />
 
 		<property name="header" value="name,age,income,date"></property>

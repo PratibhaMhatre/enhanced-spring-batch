@@ -11,15 +11,15 @@ import com.accenture.spring.batch.annotation.Trim;
 public class Report {
 
 	
-	private int refId=1;
+	private int refId;
 	
 	@ReplaceQuoteWithSpace
-	private String name="Shri\"ti";
+	private String name;
 	
-	private int age=20;
+	private int age;
 	/* private String dob; */
 	@Trim
-	private String income="    hdghsgds ksjf    ";
+	private String income;
 
 	public int getRefId() {
 		return refId;

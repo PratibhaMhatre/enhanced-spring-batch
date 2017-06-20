@@ -8,7 +8,7 @@ import com.accenture.spring.batch.test.Report;
 import com.accenture.spring.batch.transform.Annotate;
 
 @Component(value = "cvsFileProcessor")
-public class CVSFileProcessor implements
+public class CSVFileProcessor implements
 ItemProcessor<Report,Object>{
 	
 	@Autowired
@@ -17,8 +17,11 @@ ItemProcessor<Report,Object>{
 	@Override
 	public Object process(Report item) throws Exception {
 		System.out.println("Item:: "+item);
+	
+		
+		
 		Object o = annotate.transform(item);
-		System.out.println(o);
+		System.out.println("Transformed Object"+o);
 		// TODO Auto-generated method stub
 		return o;
 	}

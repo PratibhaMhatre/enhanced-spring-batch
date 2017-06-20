@@ -40,7 +40,7 @@ public class PGPFlatFileItemReader extends FlatFileItemReader<Object> implements
 	// private Resource resource;
 	
 
-	public PGPFlatFileItemReader() {
+	public PGPFlatFileItemReader() {		
 		SecurityUtil.loadSecuritySetting();
 	}
 
@@ -153,11 +153,10 @@ public class PGPFlatFileItemReader extends FlatFileItemReader<Object> implements
 		InputStream clearStream = fileDecrypter.decryptFile(inputFilePath, secretKeyFilePath, passphrase.toCharArray(),
 				"sample.txt", false, 2);
 
-
 		InputStreamResource in = new InputStreamResource(clearStream);
-
+		
 		this.setResource(in);
-
+		
 	}
 
 	private void uncompressFile(InputStream unc) throws IOException, NoSuchProviderException, PGPException {
@@ -220,4 +219,6 @@ public class PGPFlatFileItemReader extends FlatFileItemReader<Object> implements
 			FileEncrypter.fBufferedOut.close();
 		}
 	}
+
+	
 }
