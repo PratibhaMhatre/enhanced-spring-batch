@@ -110,9 +110,10 @@ public class PGPWriter implements ItemWriter<Object>, ItemStream {
 		this.header = header;
 	}
 
-	FileEncrypter fileEncrypter = new FileEncrypter();
+	FileEncrypter fileEncrypter;
 
 	public void write(List<? extends Object> items) throws Exception {
+		fileEncrypter = new FileEncrypter();
 		if (!isBufferInitialzed) {
 			isBufferInitialzed = true;
 			FileEncrypter.encWithCompress = true;
@@ -129,6 +130,7 @@ public class PGPWriter implements ItemWriter<Object>, ItemStream {
 				throw new SpringBatchException(ExceptionCodes.PUBLIC_KEY_NOTFOUND, "For Sample");
 			}
 			if (null != header) {
+
 				fileEncrypter.encryptBigText(outputFilePath, header + "\n", encKey, false, true);
 			}
 		}
@@ -149,21 +151,18 @@ public class PGPWriter implements ItemWriter<Object>, ItemStream {
 	}
 
 	@Override
-	public void open(ExecutionContext executionContext) throws ItemStreamException {
-		// TODO Auto-generated method stub
+	public void close() throws ItemStreamException {
+		FileEncrypter.closeStreams();
 
+	}
+
+	@Override
+	public void open(ExecutionContext executionContext) throws ItemStreamException {
 	}
 
 	@Override
 	public void update(ExecutionContext executionContext) throws ItemStreamException {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void close() throws ItemStreamException {
-		FileEncrypter.closeStreams();
-
+		
 	}
 
 }

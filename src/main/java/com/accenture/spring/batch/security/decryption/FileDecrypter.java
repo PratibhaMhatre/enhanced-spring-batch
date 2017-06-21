@@ -97,18 +97,13 @@ public class FileDecrypter {
 			PGPEncryptedDataList enc;
 
 			Object o = pgpF.nextObject();
-			//
-			// the first object might be a PGP marker packet.
-			//
+
 			if (o instanceof PGPEncryptedDataList) {
 				enc = (PGPEncryptedDataList) o;
 			} else {
 				enc = (PGPEncryptedDataList) pgpF.nextObject();
 			}
 
-			//
-			// find the secret key
-			//
 			@SuppressWarnings("unchecked")
 			Iterator<PGPPublicKeyEncryptedData> it = enc.getEncryptedDataObjects();
 			PGPPrivateKey sKey = null;
@@ -185,7 +180,7 @@ public class FileDecrypter {
 		} catch (PGPException e) {
 			LOGGER.error(e);
 			if (e.getUnderlyingException() != null) {
-				e.getUnderlyingException().printStackTrace();
+				LOGGER.error(e.getUnderlyingException());
 			}
 		}
 		return db;
@@ -252,18 +247,13 @@ public class FileDecrypter {
 			pgpF = new JcaPGPObjectFactory(in);
 
 			o = pgpF.nextObject();
-			//
-			// the first object might be a PGP marker packet.
-			//
+
 			if (o instanceof PGPEncryptedDataList) {
 				enc = (PGPEncryptedDataList) o;
 			} else {
 				enc = (PGPEncryptedDataList) pgpF.nextObject();
 			}
 
-			//
-			// find the secret key
-			//
 			if (null == enc) {
 				throw new SpringBatchException(ExceptionCodes.UNKNOWN_FILETYPE_ERROR,
 						"Please ensure if the contents of Input are encrypted");

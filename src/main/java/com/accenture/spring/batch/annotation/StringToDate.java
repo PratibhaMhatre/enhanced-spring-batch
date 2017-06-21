@@ -11,12 +11,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Converts String To Date 
+ * Converts String field To Date field
  * It takes input as String and converts it to Date and
  * stores it in a variable which is passed in the parameter value.
  * 
- * 
- * @author aparna.satpathy
  * @param value
  */
 @Target({ ElementType.FIELD })

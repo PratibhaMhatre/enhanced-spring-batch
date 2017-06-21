@@ -30,17 +30,18 @@ import com.accenture.spring.batch.util.SecurityUtil;
  */
 public class PGPFlatFileItemReader extends FlatFileItemReader<Object> implements InitializingBean {
 
-	private boolean isCompressed = true; /* if this flag is true that means file is commpressed*/
+	/*
+	 * if this flag is true that means file
+	 * is commpressed
+	 */
+	private boolean isCompressed = true; 
 	private String passphrase;
 	private String secretKeyFilePath;
 	private String publicKeyFilePath;
 	private String publicKeyUserId;
 	private String inputFilePath;
-	
-	// private Resource resource;
-	
 
-	public PGPFlatFileItemReader() {		
+	public PGPFlatFileItemReader() {
 		SecurityUtil.loadSecuritySetting();
 	}
 
@@ -139,13 +140,10 @@ public class PGPFlatFileItemReader extends FlatFileItemReader<Object> implements
 		super.afterPropertiesSet();
 		FileDecrypter fileDecrypter = new FileDecrypter();
 		if (this.isCompressed) {
-			// TODO Check if isCompressed is true, then generate intermediate
-			// file & change/override the input resource
 
 			this.uncompressFile(fileDecrypter.decryptFile(inputFilePath, secretKeyFilePath, passphrase.toCharArray(),
 					"sample.txt", true, 2));
 
-			
 			inputFilePath = inputFilePath + Constants.INBOUND_UNC_FILE;
 
 		}
@@ -154,12 +152,13 @@ public class PGPFlatFileItemReader extends FlatFileItemReader<Object> implements
 				"sample.txt", false, 2);
 
 		InputStreamResource in = new InputStreamResource(clearStream);
-		
+
 		this.setResource(in);
-		
+
 	}
 
-	private void uncompressFile(InputStream unc) throws IOException, NoSuchProviderException, PGPException {
+	private void uncompressFile(InputStream unc)
+			throws IOException, NoSuchProviderException, PGPException, SpringBatchException {
 
 		BufferedReader bufferRead = new BufferedReader(new InputStreamReader(unc));
 
@@ -171,12 +170,9 @@ public class PGPFlatFileItemReader extends FlatFileItemReader<Object> implements
 		String outFileName = inputFilePath + Constants.INBOUND_UNC_FILE;
 
 		if (JavaUtil.isObjectNull(publicKeyFilePath)) {
-			try {
-				throw new SpringBatchException(ExceptionCodes.PUBLIC_KEY_NOTFOUND, "For Public Key Path");
-			} catch (SpringBatchException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+
+			throw new SpringBatchException(ExceptionCodes.PUBLIC_KEY_NOTFOUND, "For Public Key Path");
+
 		}
 		encKey = SecurityUtil.readPublicKey(publicKeyFilePath, publicKeyUserId);
 
@@ -192,7 +188,6 @@ public class PGPFlatFileItemReader extends FlatFileItemReader<Object> implements
 					RecordsBuilder.append(record);
 				}
 				fileEncrypter.encryptBigText(outFileName, RecordsBuilder.toString(), encKey, false, true);
-				// Clearing ArrayList after every chunk is encrypted
 				rawdata.clear();
 			}
 			line = bufferRead.readLine();
@@ -220,5 +215,4 @@ public class PGPFlatFileItemReader extends FlatFileItemReader<Object> implements
 		}
 	}
 
-	
 }

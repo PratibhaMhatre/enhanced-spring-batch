@@ -1,8 +1,7 @@
 package com.accenture.spring.batch.annotation;
 /**
- * It deletes the source file
+ * It deletes the source files from the source which satisfies the regular expression
  * 
- * @author Shruti Sethia
  * @param source,filename,regexpression
  */
 import java.lang.annotation.Documented;

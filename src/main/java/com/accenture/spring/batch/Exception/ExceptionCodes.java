@@ -1,6 +1,6 @@
 package com.accenture.spring.batch.Exception;
 /**
- * @author tkmaawv
+ *
  * 
  */
 public enum ExceptionCodes {

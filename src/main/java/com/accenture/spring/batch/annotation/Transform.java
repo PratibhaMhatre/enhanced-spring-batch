@@ -4,8 +4,7 @@
  */
 package com.accenture.spring.batch.annotation;
 /**
- * It allows you to use annotations(ReplaceQuoteWithSpace,StringToDate,StringToTimestamp,Trim,UtilDateToSqlDate,UtilDateToSqlTimestamp)
- * @author Shruti Sethia
+ * It allows to use annotations(@ReplaceQuoteWithSpace,@StringToDate,@StringToTimestamp,@Trim,@UtilDateToSqlDate,@UtilDateToSqlTimestamp)
  * 
  */
 import java.lang.annotation.ElementType;

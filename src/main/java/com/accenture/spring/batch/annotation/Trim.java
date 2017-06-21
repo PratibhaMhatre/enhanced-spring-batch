@@ -13,8 +13,6 @@ import java.lang.annotation.Target;
 /**
  * Trims all the Spaces
  * 
- * @author aparna.satpathy
- * 
  */
 @Target({ ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)

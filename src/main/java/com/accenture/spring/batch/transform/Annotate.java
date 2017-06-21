@@ -34,8 +34,6 @@ import com.accenture.spring.batch.util.FileUtils;
 /**
  * Implementation of Annotated Fields
  * 
- * @author aparna.satpathy,shruti.mukesh.sethia
- * 
  */
 @Component
 public class Annotate {

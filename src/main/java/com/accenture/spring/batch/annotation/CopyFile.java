@@ -1,9 +1,8 @@
 package com.accenture.spring.batch.annotation;
 
 /**
- *It copies the file from the source to destination. 
+ *It copies all the file from the source to destination which satisfies the regular expression
  * 
- * @author Shruti Sethia
  * @param source,destination,filename,regexpression
  */
 import java.lang.annotation.Documented;

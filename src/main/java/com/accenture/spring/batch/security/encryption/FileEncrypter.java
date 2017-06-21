@@ -56,7 +56,6 @@ public class FileEncrypter {
 
     /**
      * Encrypts records equal to batchSize & writes encrypted bytes to sample output File
-     * @author tkmaawv
      * @param fileName Name of output File for sample with absolute file path
      * @param stringToBeEnc contains records to be encrypted & written to sample output file
      * @param encKey is a PGPPublicKey to be used for Encryption

@@ -2,7 +2,6 @@ package com.accenture.spring.batch.annotation;
 /**
  * It purges all the files older than the time(days) given in parameter purgeDuration. 
  * 
- * @author Shruti Sethia
  * @param archiveDir,purgeDuration,filename,regexpression
  */
 import java.lang.annotation.Documented;

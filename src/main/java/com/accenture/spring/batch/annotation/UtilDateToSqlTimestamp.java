@@ -14,8 +14,6 @@ import java.lang.annotation.Target;
  * It takes input as utilDate and converts it to SqlTimestamp and
  * stores it in a variable which is passed in the parameter value.
  * 
- * 
- * @author aparna.satpathy
  * @param value
  */
 @Target({ ElementType.FIELD })

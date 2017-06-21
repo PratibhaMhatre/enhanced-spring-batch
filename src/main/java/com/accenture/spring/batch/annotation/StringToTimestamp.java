@@ -12,11 +12,8 @@ import java.lang.annotation.Target;
 
 /**
  * Converts String To Timestamp 
- * It takes input as String and converts it to
- * Timestamp and stores it in a variable which is passed in the parameter value.
+ * It takes input as String and converts it to timestamp and stores it in a variable which is passed in the parameter value.
  * 
- * 
- * @author aparna.satpathy
  * @param value
  */
 @Target({ ElementType.FIELD })

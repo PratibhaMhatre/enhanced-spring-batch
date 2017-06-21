@@ -2,7 +2,6 @@ package com.accenture.spring.batch.annotation;
 /**
  * It renames the file with the name given in parameter rename.
  * 
- * @author Shruti Sethia
  * @param source,filename,regexpression,rename
  */
 import java.lang.annotation.Documented;
